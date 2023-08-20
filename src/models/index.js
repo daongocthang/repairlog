@@ -9,8 +9,8 @@ const sequelize = new Sequelize(cnf.DB, cnf.USER, cnf.PASSWORD, {
     pool: cnf.pool,
 });
 
-const models = {};
-models.sequelize = sequelize;
-models.WorkOrder = WorkOrder(sequelize);
+const db = {};
+db.sequelize = sequelize;
+db.WorkOrder = WorkOrder(sequelize);
 
-export default models;
+export default db;

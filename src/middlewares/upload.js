@@ -1,7 +1,7 @@
 import multer from 'multer';
 
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype.includes('excel') || file.mimetype('spreadsheetml')) {
+    if (file.mimetype.includes('excel') || file.mimetype.includes('spreadsheetml')) {
         cb(null, true);
     } else {
         cb('Please upload only excel file.', file);
@@ -10,15 +10,15 @@ const fileFilter = (req, file, cb) => {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, __basedir + 'res/assets/uploads/');
+        cb(null, __basedir + '/res/uploads/');
     },
     filename: (req, file, cb) => {
-        console.log(file.originalname);
+        // console.log(file.path);
         cb(null, `${Date.now()}-${file.originalname}`);
     },
 });
 
 export const uploadFile = multer({
-    storage,
-    fileFilter,
+    storage: storage,
+    fileFilter: fileFilter,
 });
