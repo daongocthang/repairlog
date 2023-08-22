@@ -10,7 +10,7 @@ export const upload = async (req, res) => {
             return res.status(400).send({ message: 'Please upload an excel file.' });
         }
 
-        const path = __basedir + '/res/uploads/' + req.file.filename;
+        const path = __basedir + '/public/uploads/' + req.file.filename;
 
         let workorders = [];
         let rows = await readXlsxFile(path);
