@@ -21,7 +21,8 @@ models.sequelize.sync();
 //     .catch((e) => console.log('Failed to sync database: ' + e.message));
 
 app.get('/', async (req, res) => {
-    let data = await models.WorkOrder.findAll();
+    let WorkOrder = await models.WorkOrder.findAll();
+    let data = JSON.stringify(WorkOrder);
     res.render('pages/index', { data });
 });
 

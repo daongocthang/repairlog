@@ -16,8 +16,8 @@ export const WorkOrder = (sequelize) =>
             description: DataTypes.TEXT,
             newSerial: DataTypes.STRING,
             remarks: DataTypes.TEXT,
-            method: { type: DataTypes.INTEGER, defaultValue: 0 },
-            status: { type: DataTypes.INTEGER, defaultValue: 0 },
+            method: DataTypes.STRING,
+            status: DataTypes.STRING,
         },
         { updatedAt: false },
     );
