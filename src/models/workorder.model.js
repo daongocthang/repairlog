@@ -15,9 +15,9 @@ export const WorkOrder = (sequelize) =>
             serial: DataTypes.STRING,
             description: DataTypes.TEXT,
             newSerial: DataTypes.STRING,
-            remarks: DataTypes.TEXT,
+            remark: DataTypes.TEXT,
             method: DataTypes.STRING,
-            status: DataTypes.STRING,
+            status: { type: DataTypes.STRING, defaultValue: 'đang sửa' },
         },
         { updatedAt: false },
     );

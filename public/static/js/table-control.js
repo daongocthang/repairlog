@@ -1,21 +1,13 @@
-window.selectors = [];
+var selections = [];
 
-const initTable = (elem) => {
-    $(elem).bootstrapTable({
+const initTable = function (tableId) {
+    $(tableId).bootstrapTable({
         icons: { clearSearch: 'glyphicon-remove' },
     });
-    $(elem).on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', () => {
-        window.selectors = $.map($(elem).bootstrapTable('getSelections'), (row) => row.receiptNo);
 
-        if (window.selectors.length) {
-            $('#menuOthers .dropdown-item').removeClass('hidden');
-            $('#menuOthers .dropdown-header').addClass('hidden');
-            $('#menuDel').removeClass('disabled');
-        } else {
-            $('#menuOthers .dropdown-item').addClass('hidden');
-            $('#menuOthers .dropdown-header').removeClass('hidden');
-            $('#menuDel').addClass('disabled');
-        }
+    $(tableId).on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function () {
+        selections = $.map($(tableId).bootstrapTable('getSelections'), (row) => row.receiptNo);
+        notifySelectionChanged();
     });
 
     // searchOnEnterKey
@@ -24,4 +16,33 @@ const initTable = (elem) => {
             $('.search input').select();
         }
     });
+
+    // onOptionItemSelected
+    $('#menuOthers').on('click', 'li.dropdown-item', function () {
+        $.ajax({
+            url: $(this).data('url'),
+            type: 'POST',
+            caches: false,
+            data: { serializable: JSON.stringify(selections) },
+            success: function (data) {
+                console.log(data);
+                renderStats();
+                $(tableId).bootstrapTable('refresh');
+                selections = [];
+                notifySelectionChanged();
+            },
+        });
+    });
 };
+
+function notifySelectionChanged() {
+    if (selections.length) {
+        $('#menuOthers .dropdown-item').removeClass('hidden');
+        $('#menuOthers .dropdown-header').addClass('hidden');
+        $('#menuDel').removeClass('disabled');
+    } else {
+        $('#menuOthers .dropdown-item').addClass('hidden');
+        $('#menuOthers .dropdown-header').removeClass('hidden');
+        $('#menuDel').addClass('disabled');
+    }
+}

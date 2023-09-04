@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import slugify from 'slugify';
 
 export const dbConfig = {
     HOST: process.env.DB_HOST,
@@ -13,4 +14,38 @@ export const dbConfig = {
         acquire: 30000,
         idle: 10000,
     },
+};
+
+export const createDataStatuses = () => {
+    let data = [{ name: 'đang sửa' }, { name: 'chờ trả' }, { name: 'kết thúc' }];
+    return data.map((elem) => {
+        elem.slug = slugify(elem.name, { locale: 'vi' });
+
+        return elem;
+    });
+};
+
+export const createDataStats = () => {
+    let data = [
+        { name: 'hôm nay', field: '', attr: 'primary' },
+        { name: 'chờ trả', field: 'status', attr: 'info' },
+        { name: 'đổi máy' },
+        { name: 'không hỏng' },
+        { name: 'nạp phần mềm' },
+        { name: 'hàn lại' },
+        { name: 'thay thế' },
+        { name: 'chuyển hãng' },
+        { name: 'chuyển mức' },
+        { name: 'khác' },
+        { name: 'đang sửa', field: 'status', attr: 'danger' },
+    ];
+
+    return data.map((item) => {
+        item['slug'] = item.name === 'hôm nay' ? '' : slugify(item.name, { locale: 'vi' });
+        if (item.field == undefined) {
+            item.field = 'method';
+            item.attr = 'warning';
+        }
+        return item;
+    });
 };

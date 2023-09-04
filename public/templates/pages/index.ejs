@@ -1,17 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <%- include("../partials/head"); %>
-    </head>
+<!-- HTML -->
+<div class="col-md-12"><%- include('../partials/table') %></div>
 
-    <body>
-        <%- include('../partials/menu') %>
-        <div class="container-fluid">
-            <div class="row"><%- include('../partials/header') %></div>
-            <div class="row">
-                <div class="col-md-12"><%- include('../partials/table') %></div>
-            </div>
-        </div>
-        <%- include('../partials/scripts') %>
-    </body>
-</html>
+<!-- STYLES -->
+<link rel="stylesheet" href="/css/bootstrap-table/bootstrap-table.min.css" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- SCRIPTS -->
+<script src="/js/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="/js/bootstrap-table/locale/bootstrap-table-vi-VN.min.js"></script>
+<script src="/js/bootstrap-table/extensions/bootstrap-table-cookie.min.js"></script>
+<script src="/js/table-control.js"></script>
+<script>
+    $(function () {
+        initTable('#table');
+    });
+</script>
