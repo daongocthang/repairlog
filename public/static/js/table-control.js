@@ -25,8 +25,7 @@ const initTable = function (tableId) {
             caches: false,
             data: { serializable: JSON.stringify(selections) },
             success: function (data) {
-                console.log(data);
-                renderStats();
+                renderStats(true);
                 $(tableId).bootstrapTable('refresh');
                 selections = [];
                 notifySelectionChanged();

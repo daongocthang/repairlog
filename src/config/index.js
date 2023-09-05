@@ -41,7 +41,7 @@ export const createDataStats = () => {
     ];
 
     return data.map((item) => {
-        item['slug'] = item.name === 'hôm nay' ? '' : slugify(item.name, { locale: 'vi' });
+        item['slug'] = slugify(item.name, { locale: 'vi' });
         if (item.field == undefined) {
             item.field = 'method';
             item.attr = 'warning';

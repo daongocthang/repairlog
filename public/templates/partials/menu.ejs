@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-inverse" role="navigation">
     <div class="container-fluid">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav-header">
             <span class="sr-only">Toggle navigation</span>
@@ -11,9 +11,15 @@
         </div>
 
         <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
+            <li>
+                <a href="#footwear" aria-expanded="true" aria-controls="footwear" data-toggle="collapse" role="button"
+                    >Tìm kiếm nâng cao</a
+                >
+            </li>
+
+            <li class="dropdown-right">
                 <a class="dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false">
-                    Nhập dữ liệu theo file
+                    Nhập dữ liệu
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
@@ -31,3 +37,16 @@
         </ul>
     </div>
 </nav>
+
+<div id="footwear" class="collapse">
+    <form role="search">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Tìm kiếm nâng cao" />
+            <div class="input-group-btn">
+                <button type="submit" class="btn btn-default">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

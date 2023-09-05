@@ -7,9 +7,8 @@ $('#form').submit(function () {
         },
 
         success: function (res) {
-            renderStats();
+            renderStats(true);
             $('#status').empty().text(res.message);
-            console.log(res);
         },
     });
     //Very important line, it disable the page refresh.
