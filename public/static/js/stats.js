@@ -7,7 +7,6 @@ function renderStats(update) {
                 let { attr, slug, name, count } = elem;
                 if (!update) $('#stats').append(htmlStr.f(attr, slug, name, count));
                 let selector = $("#stats a[href$='{0}']".f(slug));
-                console.log(selector);
                 if (count > 0) {
                     selector.find('span.badge').text(count);
                     selector.removeClass('hidden');
