@@ -1,0 +1,27 @@
+<form class="form-inline my-2 my-lg-0 navbar-search" action="#">
+    <div class="search-box">
+        <div class="form-group">
+            <i class="fa fa-search"></i>
+            <input type="text" class="form-control" placeholder="Tìm kiếm ..." name="value" />
+        </div>
+
+        <div class="form-group">
+            <i class="far fa-calendar-alt"></i>
+            <input type="text" class="form-control text-center dt-picker dt-3" name="start" />
+        </div>
+        <div class="form-group">
+            <i class="far fa-calendar-alt"></i>
+            <input type="text" class="form-control text-center dt-picker dt-0" name="end" />
+        </div>
+        <select class="custom-select" name="col">
+            <option value="receiptNo">Mã phiếu</option>
+            <option value="model">Tên TB</option>
+            <option value="serial" selected>Serial</option>
+            <option value="description">Mô tả lỗi</option>
+            <option value="method">Biện pháp</option>
+            <option value="remark">Chi tiết SC</option>
+            <option value="status">Trạng thái</option>
+        </select>
+    </div>
+    <button type="submit" class="invisible"></button>
+</form>

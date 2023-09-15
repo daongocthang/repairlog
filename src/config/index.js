@@ -37,14 +37,14 @@ export const createDataStats = () => {
         { name: 'chuyển hãng' },
         { name: 'chuyển mức' },
         { name: 'khác' },
-        { name: 'đang sửa', field: 'status', attr: 'danger' },
+        { name: 'đang sửa', field: 'status', attr: 'warning' },
     ];
 
     return data.map((item) => {
         item['slug'] = slugify(item.name, { locale: 'vi' });
         if (item.field == undefined) {
             item.field = 'method';
-            item.attr = 'warning';
+            item.attr = 'light';
         }
         return item;
     });
