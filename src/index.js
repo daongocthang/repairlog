@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import expressEjsLayouts from 'express-ejs-layouts';
 import models from '~/models';
-import { useBrowserRoutes, useApiRoutes } from '~/routes';
+import routes from '~/routes';
 
 global.__basedir = __dirname;
 console.log(__dirname);
@@ -28,8 +28,7 @@ models.sequelize.sync();
 //     .then(() => console.log('Synced database'))
 //     .catch((e) => console.log('Failed to sync database: ' + e.message));
 
-useBrowserRoutes(app);
-useApiRoutes(app);
+routes(app);
 
 const port = process.env.NODE_DOCKER_PORT || 3000;
 app.listen(port, () => {

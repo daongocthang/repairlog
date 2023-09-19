@@ -2,7 +2,7 @@ function renderStats(update) {
     // $('#stats').empty();
     $.get('/api/v1/stats', function (res, status) {
         if (status === 'success') {
-            let htmlStr =
+            const htmlStr =
                 '<li class="nav-item hidden"><a class="nav-link" href="/{0}">{1} <span class="badge badge-{3}">{2}</span></a></li>';
             res.data.forEach(function (elem) {
                 let { attr, slug, name, count } = elem;
@@ -15,6 +15,8 @@ function renderStats(update) {
                     selector.parent().addClass('hidden');
                 }
             });
+
+            $('.stats').find('a[href$="{0}"]'.f(window.location.pathname)).addClass('active');
         }
     });
 }

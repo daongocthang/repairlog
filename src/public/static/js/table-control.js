@@ -53,6 +53,13 @@ const initTable = function (tableId) {
                 title: 'Ngày lập',
                 sortable: true,
             },
+            {
+                field: 'operate',
+                title: 'Thao tác',
+                align: 'center',
+                formatter: operateFomatter,
+                events: window.operateEvents,
+            },
         ],
     });
 
@@ -84,6 +91,23 @@ const initTable = function (tableId) {
         });
     });
 };
+
+window.operateEvents = {
+    'click .btn-modal': function (e, value, row, index) {
+        const { receiptNo, method, newSerial, remark } = row;
+
+        onModalDisplay({
+            title: 'Sửa chữa',
+            body: '/api/v1/component/update .modal-container',
+            submit: { class: 'btn btn-success', text: 'Cập nhật', handler: 'onModalSubmit' },
+            formData: { receiptNo, method, newSerial, remark },
+        });
+    },
+};
+
+function operateFomatter(value, row, index) {
+    return '<button class="btn btn-outline-primary btn-sm btn-modal" type="button"><i class="fa fa-pen"></i></button>';
+}
 
 function notifySelectionChanged() {
     if (selections.length) {

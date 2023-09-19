@@ -1,2 +1,9 @@
-export { useBrowserRoutes } from './browser.routes';
-export { useApiRoutes } from './api.routes';
+import { BrowserRoutes } from './browser.routes';
+import { MainRoutes } from './main.routes';
+
+const routes = (app) => {
+    MainRoutes(app);
+    BrowserRoutes(app);
+};
+
+export default routes;

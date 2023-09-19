@@ -2,9 +2,10 @@ import { Router } from 'express';
 import { uploadFile } from '../middlewares/upload';
 import { upload as excelUpload } from '../controllers/excel.controller';
 import { findFromToday, fetchDataStats, findBySlug, bulkChangeStatus } from '../controllers/workorder.controller';
+import db from '../models';
 
 const router = Router();
-export const useApiRoutes = (app) => {
+export const MainRoutes = (app) => {
     router.post('/upload', uploadFile.single('file'), excelUpload);
     router.post('/upload/:field', uploadFile.single('file'), excelUpload);
 
@@ -18,6 +19,13 @@ export const useApiRoutes = (app) => {
     router.get('/stats', fetchDataStats);
     router.get('/data', findFromToday);
     router.get('/data/:slug', findBySlug);
+
+    router.get('/component/:name', async (req, res) => {
+        const { name } = req.params;
+        const methods = await db.Method.findAll();
+
+        res.render('components/' + name, { methods: methods });
+    });
 
     app.use('/api/v1/', router);
 };

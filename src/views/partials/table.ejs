@@ -1,9 +1,20 @@
 <div id="toolbar">
     <div class="btn-group" style="margin-right: 10px">
-        <a href="#" id="menuAdd" class="btn btn-default" data-toggle="modal" data-target="#modalNew"
+        <a
+            href="#"
+            class="btn btn-default btn-modal"
+            data-title="Tiếp nhận"
+            data-body="api/v1/component/create .modal-container"
+            data-submit='{"class":"btn btn-primary","text": "Tiếp nhận","handler":"onModalSubmit"}'
             ><i class="fa fa-plus"></i> Thêm
         </a>
-        <a href="#" id="menuDel" class="btn btn-danger disabled" data-toggle="modal" data-target="#modalDelete"
+        <a
+            href="#"
+            id="menuDel"
+            class="btn btn-danger btn-modal disabled"
+            data-title="Tiếp nhận"
+            data-body="/templates/modals/create.html"
+            data-submit='{"class":"btn btn-danger","text": "Xóa"}'
             ><i class="fa fa-trash"></i> Xóa
         </a>
     </div>

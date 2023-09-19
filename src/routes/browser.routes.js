@@ -3,7 +3,7 @@ import { createDataStatuses } from '../config';
 
 const router = Router();
 
-export const useBrowserRoutes = (app) => {
+export const BrowserRoutes = (app) => {
     app.get('/', (req, res) => {
         res.render('pages/', { url: '/api/v1/data', statuses: createDataStatuses() });
     });

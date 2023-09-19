@@ -17,13 +17,23 @@
                     Nhập dữ liệu
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Tiếp nhận</a>
+                    <a
+                        class="dropdown-item btn-modal"
+                        href="#"
+                        data-title="Tiếp nhận theo file"
+                        data-body="/api/v1/component/upload .modal-container"
+                        data-submit='{"class":"btn btn-primary","text":"Upload","handler":"onModalSubmit"}'
+                        >Tiếp nhận</a
+                    >
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Biện pháp</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Chi tiết</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Trạng thái</a>
+                    <a
+                        class="dropdown-item btn-modal"
+                        href="#"
+                        data-title="Sửa chữa theo file"
+                        data-body="/api/v1/component/upload .modal-container"
+                        data-submit='{"class":"btn btn-primary","text":"Upload","handler":"onModalSubmit"}'
+                        >Sửa chữa</a
+                    >
                 </div>
             </li>
         </ul>
