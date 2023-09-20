@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "nodemon --exec babel-node src/index.js",
-        "watch": "node-sass -w src/scss -o src/public/static/css",
+        "watch": "node-sass -w src/scss/ -o src/public/static/css/",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "",
@@ -16,7 +16,6 @@
         "dotenv": "^16.3.1",
         "ejs": "^3.1.9",
         "express": "^4.18.2",
-        "express-ejs-layouts": "^2.5.1",
         "moment": "^2.29.4",
         "multer": "^1.4.5-lts.1",
         "mysql2": "^3.6.0",

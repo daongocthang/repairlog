@@ -1,17 +1,21 @@
-<!-- HTML -->
-<%- include('../partials/table') %>
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>RepairLog</title>
 
-<!-- STYLES -->
-<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" />
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css"
-/>
+        <%- include('../partials/style') %>
+    </head>
 
-<!-- SCRIPTS -->
-<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
-<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/locale/bootstrap-table-vi-VN.min.js"></script>
-<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/cookie/bootstrap-table-cookie.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"></script>
-<script src="/js/table-control.js"></script>
-<script src="/js/main.js"></script>
+    <body>
+        <%- include('../partials/navbar') %>
+        <div class="mx-4">
+            <ul class="nav nav-pills stats"></ul>
+            <%- include('../partials/table') %>
+        </div>
+        <%- include('../partials/modal') %>
+        <div id="toast"></div>
+        <%- include('../partials/script') %>
+    </body>
+</html>

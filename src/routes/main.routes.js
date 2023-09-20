@@ -6,8 +6,8 @@ import db from '../models';
 
 const router = Router();
 export const MainRoutes = (app) => {
-    router.post('/upload', uploadFile.single('file'), excelUpload);
-    router.post('/upload/:field', uploadFile.single('file'), excelUpload);
+    router.post('/import', uploadFile.single('file'), excelUpload);
+    router.post('/import/:field', uploadFile.single('file'), excelUpload);
 
     router.post('/status/:slug', bulkChangeStatus);
 
@@ -20,7 +20,7 @@ export const MainRoutes = (app) => {
     router.get('/data', findFromToday);
     router.get('/data/:slug', findBySlug);
 
-    router.get('/component/:name', async (req, res) => {
+    router.get('/view/:name', async (req, res) => {
         const { name } = req.params;
         const methods = await db.Method.findAll();
 

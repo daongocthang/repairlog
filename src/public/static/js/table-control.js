@@ -96,9 +96,9 @@ window.operateEvents = {
     'click .btn-modal': function (e, value, row, index) {
         const { receiptNo, method, newSerial, remark } = row;
 
-        onModalDisplay({
+        showModal({
             title: 'Sửa chữa',
-            body: '/api/v1/component/update .modal-container',
+            body: '/api/v1/view/update',
             submit: { class: 'btn btn-success', text: 'Cập nhật', handler: 'onModalSubmit' },
             formData: { receiptNo, method, newSerial, remark },
         });
@@ -119,6 +119,10 @@ function notifySelectionChanged() {
         $('#menuOthers .dropdown-header').removeClass('hidden');
         $('#menuDel').addClass('disabled');
     }
+}
+
+function loadingTemplate() {
+    return `<i class="fa fa-spinner fa-spin"></i>`;
 }
 
 $(function () {

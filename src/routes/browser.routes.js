@@ -3,20 +3,17 @@ import { createDataStatuses } from '../config';
 
 const router = Router();
 
-export const BrowserRoutes = (app) => {
-    app.get('/', (req, res) => {
-        res.render('pages/', { url: '/api/v1/data', statuses: createDataStatuses() });
-    });
+const baseurl = '/api/v1/';
 
+export const BrowserRoutes = (app) => {
     app.get('/:slug', (req, res) => {
         let { slug } = req.params;
-        if (slug === 'hom-nay') slug = '';
-        res.render('pages/index', { url: '/api/v1/data/' + slug, statuses: createDataStatuses() });
-    });
-
-    app.get('/upload/:field', (req, res) => {
-        let { field } = req.params;
-        res.render('pages/upload', { url: '/api/v1/upload/' + (field === 'today' ? '' : field) });
+        if (slug == undefined) slug = 'hom-nay';
+        res.render('pages/index', {
+            url: baseurl + 'data/' + slug,
+            statuses: createDataStatuses(),
+            view: baseurl + 'view/',
+        });
     });
 
     app.use('/', router);

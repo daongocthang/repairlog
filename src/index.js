@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import expressEjsLayouts from 'express-ejs-layouts';
 import models from '~/models';
 import routes from '~/routes';
 
@@ -14,11 +13,6 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 app.use(express.static(__dirname + '/public/static'));
-
-app.use(expressEjsLayouts);
-app.set('layout', './layouts/default');
-app.set('layout extractScripts', true);
-app.set('layout extractStyles', true);
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
