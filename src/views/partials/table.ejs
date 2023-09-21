@@ -4,7 +4,7 @@
             href="#"
             class="btn btn-default btn-modal"
             data-title="Tiếp nhận"
-            data-body="<%= view %>create"
+            data-body="/api/v1/view/create"
             data-submit='{"class":"btn btn-primary","text": "Tiếp nhận","handler":"onModalSubmit"}'
             ><i class="fa fa-plus"></i> Thêm
         </a>
@@ -13,7 +13,7 @@
             id="menuDel"
             class="btn btn-danger btn-modal disabled"
             data-title="Xóa dữ liệu"
-            data-body="<%= view %>delete"
+            data-body="/api/v1/view/delete"
             data-submit='{"class":"btn btn-danger","text": "Xóa"}'
             ><i class="fa fa-trash"></i> Xóa
         </a>
@@ -40,7 +40,7 @@
     data-cookie="true"
     data-cookie-id-table="saveId"
     data-undefined-text=""
-    data-url="<%= url %>"
+    data-url="<%= dataTable %>"
     data-pagination="true"
     data-page-size="100"
     data-page-list="[50, 100, 200, 500, All]"

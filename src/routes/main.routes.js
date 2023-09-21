@@ -16,7 +16,7 @@ export const MainRoutes = (app) => {
     router.put('/order/:pk');
     router.delete('/order/:pk');
 
-    router.get('/stats', fetchDataStats);
+    router.get('/clouds', fetchDataStats);
     router.get('/data', findFromToday);
     router.get('/data/:slug', findBySlug);
 
@@ -24,7 +24,7 @@ export const MainRoutes = (app) => {
         const { name } = req.params;
         const methods = await db.Method.findAll();
 
-        res.render('components/' + name, { methods: methods });
+        res.render('templates/forms/' + name, { methods: methods });
     });
 
     app.use('/api/v1/', router);

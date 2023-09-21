@@ -55,7 +55,7 @@ $('.btn-modal').click(function (ev) {
     showModal($(this).data());
 });
 
-function showModal({ title, body, submit, formData }) {
+function showModal({ title, body, submit, dataForm }) {
     const btSubmit = $('#modal .modal-footer').children().last();
 
     btSubmit.removeClass();
@@ -66,8 +66,8 @@ function showModal({ title, body, submit, formData }) {
 
     $('#modal .modal-body').load(body, function () {
         const form = $('.modal .modal-body').find('form');
-        if (form && formData) {
-            $.each(formData, function (k, v) {
+        if (form && dataForm) {
+            $.each(dataForm, function (k, v) {
                 form.find('[name="{0}"]'.f(k)).val(v);
             });
         }

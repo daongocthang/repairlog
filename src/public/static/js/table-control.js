@@ -100,13 +100,16 @@ window.operateEvents = {
             title: 'Sửa chữa',
             body: '/api/v1/view/update',
             submit: { class: 'btn btn-success', text: 'Cập nhật', handler: 'onModalSubmit' },
-            formData: { receiptNo, method, newSerial, remark },
+            dataForm: { receiptNo, method, newSerial, remark },
         });
     },
 };
 
 function operateFomatter(value, row, index) {
-    return '<button class="btn btn-outline-primary btn-sm btn-modal" type="button"><i class="fa fa-pen"></i></button>';
+    return `<button class="btn btn-outline-primary btn-sm btn-modal" 
+    type="button">
+    <i class="fa fa-pen"></i>
+    </button>`;
 }
 
 function notifySelectionChanged() {
