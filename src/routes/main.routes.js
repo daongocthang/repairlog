@@ -13,8 +13,8 @@ export const MainRoutes = (app) => {
 
     router.post('/status/:slug', bulkChangeStatus);
 
-    router.post('/order');
-    router.put('/order');
+    router.post('/order', order.createOne);
+    router.put('/order/:pk');
     router.delete('/order', order.removeAllSelections);
 
     router.get('/clouds', fetchDataStats);

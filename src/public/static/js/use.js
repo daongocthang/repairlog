@@ -13,7 +13,7 @@ function removeAllSelections() {
     const form = $('#modal form');
     if (!form) return;
 
-    handleModalSubmit({
+    modal.submit({
         type: 'delete',
         data: { selections: JSON.stringify(selections) },
         then: function () {
@@ -28,9 +28,17 @@ function createOne() {
     const form = $('#modal form');
     if (!form) return;
     form.validate({
+        rules: {
+            receiptNo: {
+                minlength: 31,
+                maxlength: 32,
+            },
+        },
         messages: {
             receiptNo: {
                 required: 'Bắt buộc nhập mã phiếu',
+                minlength: 'Mã phiếu không hợp lệ',
+                maxlength: 'Mã phiếu không hợp lệ',
             },
             model: {
                 required: 'Bắt buộc nhập tên TB',
@@ -39,8 +47,7 @@ function createOne() {
     });
 
     if (!form.valid()) return;
-    const data = form.serializeArray();
-
+    const data = parseSerializeArray(form.serializeArray());
     modal.submit({
         data: { stringified: JSON.stringify(data) },
         then: function () {

@@ -55,6 +55,16 @@ $('.btn-modal').click(function (ev) {
     modal.show($(this).data());
 });
 
+function parseSerializeArray(array) {
+    let results = {};
+    $.each(array, function (i, v) {
+        let val = v.value.replace(/\r\n$|\n$|^\s+|\s+$/g, '');
+        if (val.length > 0) results[v.name] = val;
+    });
+
+    return results;
+}
+
 const modal = {
     show: function ({ title, body, submit, fields }) {
         const btSubmit = $('#modal .modal-footer').children().last();
@@ -93,10 +103,12 @@ const modal = {
             data,
             success: function (res) {
                 $('#modal').modal('hide');
+                toast(res);
                 if (then instanceof Function) then(res);
             },
             error: function (err) {
                 $('#modal').modal('hide');
+                toast(err);
                 if (except instanceof Function) except(err);
             },
         });

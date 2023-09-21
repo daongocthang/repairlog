@@ -13,13 +13,14 @@ const removeAllSelections = (req, res) => {
         .then(() => {
             res.status(200).send({ message: `Đã xóa thành công ${count} giao dịch`, type: 'success' });
         })
-        .catch(({ er }) => {
+        .catch(() => {
             res.status(500).send({ message: 'Giao dịch không thể xóa', type: 'error' });
         });
 };
 
 const createOne = (req, res) => {
     const newOrder = JSON.parse(req.body.stringified);
+    console.log(newOrder);
     Order.create(newOrder)
         .then(() => {
             res.status(200).send({ message: `Đã tạo thành công 1 giao dịch`, type: 'success' });
@@ -31,4 +32,5 @@ const createOne = (req, res) => {
 
 export default {
     removeAllSelections,
+    createOne,
 };
