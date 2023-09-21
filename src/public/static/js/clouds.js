@@ -1,4 +1,4 @@
-function renderStats(update) {
+function renderClouds(update) {
     $.get('/api/v1/clouds', function (res, status) {
         if (status === 'success') {
             const root = $('#clouds');
@@ -22,5 +22,5 @@ function renderStats(update) {
 }
 
 $(function () {
-    renderStats();
+    renderClouds();
 });

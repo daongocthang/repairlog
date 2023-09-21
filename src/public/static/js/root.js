@@ -52,33 +52,53 @@ function toast({ message = '', type = 'success' }) {
  Requirement: Bootstrap
 */
 $('.btn-modal').click(function (ev) {
-    showModal($(this).data());
+    modal.show($(this).data());
 });
 
-function showModal({ title, body, submit, dataForm }) {
-    const btSubmit = $('#modal .modal-footer').children().last();
+const modal = {
+    show: function ({ title, body, submit, fields }) {
+        const btSubmit = $('#modal .modal-footer').children().last();
 
-    btSubmit.removeClass();
-    btSubmit.addClass(submit.class);
-    btSubmit.text(submit.text);
+        btSubmit.removeClass();
+        btSubmit.addClass(submit.class);
+        btSubmit.text(submit.text);
 
-    $('#modal .modal-title').text(title);
+        $('#modal .modal-title').text(title);
 
-    $('#modal .modal-body').load(body, function () {
-        const form = $('.modal .modal-body').find('form');
-        if (form && dataForm) {
-            $.each(dataForm, function (k, v) {
-                form.find('[name="{0}"]'.f(k)).val(v);
-            });
-        }
+        $('#modal .modal-body').load(body, function () {
+            // PreDisplay
+            if (fields) {
+                $.each(fields, function (k, v) {
+                    $('#modal').find(`[name="${k}"]`).val(v);
+                });
+            }
 
-        $('#modal').modal({ show: true });
-    });
+            $('#modal').modal({ show: true });
+        });
 
-    btSubmit.off('click');
-    btSubmit.on('click', function () {
-        if (window[submit.handler] instanceof Function) {
-            window[submit.handler]();
-        }
-    });
-}
+        btSubmit.off('click');
+        btSubmit.on('click', function () {
+            if (window[submit.handler] instanceof Function) {
+                window[submit.handler]();
+            }
+        });
+    },
+    dismiss: function () {
+        $('#modal').modal('hide');
+    },
+    submit: function ({ url = 'api/v1/order', type = 'post', data = {}, then, except }) {
+        $.ajax({
+            type,
+            url,
+            data,
+            success: function (res) {
+                $('#modal').modal('hide');
+                if (then instanceof Function) then(res);
+            },
+            error: function (err) {
+                $('#modal').modal('hide');
+                if (except instanceof Function) except(err);
+            },
+        });
+    },
+};

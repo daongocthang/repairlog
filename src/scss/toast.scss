@@ -7,10 +7,11 @@
 
 .custom-toast {
     display: flex;
-    background-color: #fff;
+    background-color: #333;
     padding: 10px 24px;
-    color: #333;
+    color: #fff;
     min-width: 300px;
+    max-width: 500px;
     align-items: center;
     border-radius: 4px;
     border-left: 4px solid;
@@ -28,8 +29,11 @@
 
 .toast__close {
     font-size: 20px;
-    color: rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.3);
     cursor: pointer;
+    :hover {
+        color: rgba(255, 255, 255, 0.5);
+    }
 }
 
 .toast--success {

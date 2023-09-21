@@ -5,7 +5,7 @@
             class="btn btn-default btn-modal"
             data-title="Tiếp nhận"
             data-body="/api/v1/view/create"
-            data-submit='{"class":"btn btn-primary","text": "Tiếp nhận","handler":"onModalSubmit"}'
+            data-submit='{"class":"btn btn-primary","text": "Tiếp nhận","handler":"createOne"}'
             ><i class="fa fa-plus"></i> Thêm
         </a>
         <a
@@ -14,7 +14,7 @@
             class="btn btn-danger btn-modal disabled"
             data-title="Xóa dữ liệu"
             data-body="/api/v1/view/delete"
-            data-submit='{"class":"btn btn-danger","text": "Xóa"}'
+            data-submit='{"class":"btn btn-danger","text": "Xóa","handler":"removeAllSelections"}'
             ><i class="fa fa-trash"></i> Xóa
         </a>
     </div>

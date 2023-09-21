@@ -1,4 +1,5 @@
 @import '/dist/css/normalize.css';
+@import 'colors';
 @import '/css/toast.css';
 
 mark {
@@ -53,4 +54,10 @@ mark {
             padding: 10px;
         }
     }
+}
+
+label.error {
+    color: $text-danger;
+    font-size: small;
+    font-style: italic;
 }

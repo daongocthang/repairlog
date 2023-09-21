@@ -83,10 +83,7 @@ const initTable = function (tableId) {
             caches: false,
             data: { serializable: JSON.stringify(selections) },
             success: function (data) {
-                renderStats(true);
-                $(tableId).bootstrapTable('refresh');
-                selections = [];
-                notifySelectionChanged();
+                notifyDataSetChanged();
             },
         });
     });
@@ -94,13 +91,11 @@ const initTable = function (tableId) {
 
 window.operateEvents = {
     'click .btn-modal': function (e, value, row, index) {
-        const { receiptNo, method, newSerial, remark } = row;
-
-        showModal({
+        modal.show({
             title: 'Sửa chữa',
             body: '/api/v1/view/update',
-            submit: { class: 'btn btn-success', text: 'Cập nhật', handler: 'onModalSubmit' },
-            dataForm: { receiptNo, method, newSerial, remark },
+            submit: { class: 'btn btn-success', text: 'Cập nhật', handler: 'updateByPk' },
+            fields: row,
         });
     },
 };
@@ -122,6 +117,13 @@ function notifySelectionChanged() {
         $('#menuOthers .dropdown-header').removeClass('hidden');
         $('#menuDel').addClass('disabled');
     }
+}
+
+function notifyDataSetChanged() {
+    renderClouds(true);
+    selections = [];
+    notifySelectionChanged();
+    $('#table').bootstrapTable('refresh');
 }
 
 function loadingTemplate() {

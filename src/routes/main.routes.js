@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { uploadFile } from '../middlewares/upload';
 import { upload as excelUpload } from '../controllers/excel.controller';
 import { findFromToday, fetchDataStats, findBySlug, bulkChangeStatus } from '../controllers/workorder.controller';
+import { order } from '../controllers';
+
 import db from '../models';
 
 const router = Router();
@@ -11,10 +13,9 @@ export const MainRoutes = (app) => {
 
     router.post('/status/:slug', bulkChangeStatus);
 
-    router.get('/order');
     router.post('/order');
-    router.put('/order/:pk');
-    router.delete('/order/:pk');
+    router.put('/order');
+    router.delete('/order', order.removeAllSelections);
 
     router.get('/clouds', fetchDataStats);
     router.get('/data', findFromToday);
