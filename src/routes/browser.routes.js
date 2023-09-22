@@ -11,7 +11,7 @@ export const BrowserRoutes = (app) => {
         let { slug } = req.params;
         res.render('pages/index', {
             dataTable: '/api/v1/data/' + slug,
-            statuses: createDataStatuses(),
+            statuses: ['đang sửa', 'chờ trả', 'kết thúc'],
         });
     });
 

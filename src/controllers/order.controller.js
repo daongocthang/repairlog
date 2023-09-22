@@ -30,7 +30,32 @@ const createOne = (req, res) => {
         });
 };
 
+const bulkChangeStatus = (req, res) => {
+    const constraints = {
+        receiptNo: JSON.parse(req.body.constraints),
+    };
+    const newStatus = ['đang sửa', 'chờ trả', 'kết thúc'].find(
+        (s) => slugify(s, { locale: 'vi' }) === req.params.status,
+    ).name;
+
+    WorkOrder.update(
+        {
+            status: newStatus,
+        },
+        {
+            where: constraints,
+        },
+    )
+        .then((data) => {
+            res.status(200).send(data);
+        })
+        .catch((e) => {
+            res.status(500).send({ message: e.message || 'Some error occured.' });
+        });
+};
+
 export default {
     removeAllSelections,
     createOne,
+    bulkChangeStatus,
 };

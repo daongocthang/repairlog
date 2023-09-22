@@ -51,7 +51,9 @@ mark {
             position: absolute;
             z-index: 100;
             color: #ced4da;
-            padding: 10px;
+            padding-left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
         }
     }
 }
