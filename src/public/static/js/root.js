@@ -12,7 +12,7 @@ String.prototype.format = String.prototype.f = function () {
 // Toast message
 function toast({ message = '', type = 'success' }) {
     const root = $('#toast');
-    const duration = 3000;
+    const duration = 5000;
 
     if (!root) return;
 
@@ -79,7 +79,7 @@ const modal = {
             // PreDisplay
             if (fields) {
                 $.each(fields, function (k, v) {
-                    $('#modal').find(`[name="${k}"]`).val(v);
+                    if (v) $('#modal').find(`[name="${k}"]`).val(v);
                 });
             }
 
@@ -96,21 +96,23 @@ const modal = {
     dismiss: function () {
         $('#modal').modal('hide');
     },
-    submit: function ({ url = 'api/v1/order', type = 'post', data = {}, then, except }) {
+    submit: function (settings, then, except) {
         $.ajax({
-            type,
-            url,
-            data,
-            success: function (res) {
+            beforeSend: function () {
                 $('#modal').modal('hide');
+            },
+            success: function (res) {
                 toast(res);
                 if (then instanceof Function) then(res);
             },
             error: function (err) {
-                $('#modal').modal('hide');
-                toast(err);
+                toast(err.responseJSON);
                 if (except instanceof Function) except(err);
             },
+            complete: function () {
+                $('#loader').modal('hide');
+            },
+            ...settings,
         });
     },
 };

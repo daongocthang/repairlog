@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createDataStatuses } from '../config';
+import R from '../R';
 
 const router = Router();
 
@@ -11,7 +11,7 @@ export const BrowserRoutes = (app) => {
         let { slug } = req.params;
         res.render('pages/index', {
             dataTable: '/api/v1/data/' + slug,
-            statuses: ['đang sửa', 'chờ trả', 'kết thúc'],
+            status: R.status,
         });
     });
 

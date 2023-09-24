@@ -1,7 +1,6 @@
 function renderClouds(update) {
     $.get('/api/v1/clouds', function (res, status) {
         if (status === 'success') {
-            console.log(res);
             const root = $('#clouds');
             const htmlStr =
                 '<li class="nav-item hidden"><a class="nav-link" href="/{0}">{1} <span class="badge badge-{3}">{2}</span></a></li>';

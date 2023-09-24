@@ -1,30 +1,28 @@
 import { Router } from 'express';
 import { uploadFile } from '../middlewares/upload';
 import { upload as excelUpload } from '../controllers/excel.controller';
-import { findFromToday, fetchDataStats, findBySlug, bulkChangeStatus } from '../controllers/workorder.controller';
-import { order, dataview } from '../controllers';
+import { order, clouds } from '../controllers';
 
 import db from '../models';
 
 const router = Router();
 export const MainRoutes = (app) => {
-    router.post('/import', uploadFile.single('file'), excelUpload);
-    router.post('/import/:field', uploadFile.single('file'), excelUpload);
+    router.post('/import/:type', uploadFile.single('file'), excelUpload);
 
-    router.post('/order', order.createOne);
-    router.put('/order/:pk');
-    router.put('/order/bulk-change-status/:status', order.bulkChangeStatus);
+    router.get('/data/:slug', order.findBySlug);
+    router.post('/order', order.create);
+    router.put('/order/update', order.updateByPk);
+    router.put('/order/status/:status', order.bulkChangeStatus);
     router.delete('/order', order.removeAllSelections);
 
-    router.get('/clouds', dataview.buildClouds);
-    router.get('/data/:slug', dataview.findBySlug);
+    router.get('/clouds', clouds);
 
     router.get('/view/:name', async (req, res) => {
         const { name } = req.params;
         const methods = await db.Method.findAll();
 
         res.render('templates/forms/' + name, { methods: methods });
-    });
+    });   
 
     app.use('/api/v1/', router);
 };

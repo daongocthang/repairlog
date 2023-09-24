@@ -79,11 +79,15 @@ const initTable = function (tableId) {
     $('#menuOthers').on('click', '.dropdown-item', function () {
         $.ajax({
             url: $(this).data('url'),
-            type: 'POST',
+            type: 'PUT',
             caches: false,
-            data: { serializable: JSON.stringify(selections) },
-            success: function (data) {
+            data: { constraints: JSON.stringify(selections) },
+            success: function (res) {
+                toast(res);
                 notifyDataSetChanged();
+            },
+            error: function (err) {
+                toast(err);
             },
         });
     });

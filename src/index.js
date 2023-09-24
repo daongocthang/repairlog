@@ -3,9 +3,11 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import models from '~/models';
 import routes from '~/routes';
+import { TagBuilder } from './R/utils';
+import { Op } from 'sequelize';
+import R from './R';
 
-global.__basedir = __dirname;
-console.log(__dirname);
+global.__basedir = __dirname + '/public';
 
 const app = express();
 
@@ -18,8 +20,14 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-models.sequelize.sync();
-//     .then(() => console.log('Synced database'))
+models.sequelize.sync().then(async () => {
+    let methods = await models.Method.findAll();
+    R.tags.push(
+        ...methods.map((m) => {
+            return TagBuilder.build(m.name, { method: m.name, status: { [Op.notLike]: '%chờ trả%' } });
+        }),
+    );
+});
 //     .catch((e) => console.log('Failed to sync database: ' + e.message));
 
 routes(app);

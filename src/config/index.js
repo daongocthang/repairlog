@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { Op } from 'sequelize';
 import slugify from 'slugify';
 
 export const dbConfig = {

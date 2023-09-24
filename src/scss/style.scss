@@ -10,8 +10,9 @@ mark {
     display: none;
 }
 
-.nav-pills {
+#clouds.nav-pills {
     margin-bottom: 25px;
+    min-height: 64px;
     .nav-item {
         margin: 12px;
         margin-left: 0;

@@ -6,7 +6,7 @@
     <div class="form-group">
         <label class="control-label">Biện pháp</label>
         <select class="form-control" name="method">
-            <option selected>- Chọn -</option>
+            <option selected value="">- Chọn -</option>
             <% methods.forEach(method => { %>
             <option value="<%= method.name %>"><%= method.name %></option>
             <% }) %>
