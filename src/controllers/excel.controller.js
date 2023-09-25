@@ -92,7 +92,7 @@ const bulkCreate = async (rows, res) => {
         });
 };
 
-const bulkUpdate = (rows, req, res) => {
+const bulkUpdate = (rows, res) => {
     let field = req.params.field;
     let value = {};
     let promises = [];

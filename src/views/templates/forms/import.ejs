@@ -1,7 +1,14 @@
-<form enctype="multipart/form-data" method="post" action="/api/v1/import">
-    <input
-        type="file"
-        name="file"
-        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-    />
-</form>
+<div class="mb-2">
+    <form enctype="multipart/form-data" method="post" action="/api/v1/import">
+        <input
+            type="file"
+            name="file"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+        />
+    </form>
+</div>
+<div class="download">
+    <small>
+        <a href="/api/v1/download?file=mau_tiep_nhan.xlsx">Tải file mẫu tại đáy</a>
+    </small>
+</div>

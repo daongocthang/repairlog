@@ -55,7 +55,7 @@ $('.btn-modal').click(function (ev) {
     modal.show($(this).data());
 });
 
-function parseSerializeArray(array) {
+function parseJsonData(array) {
     let results = {};
     $.each(array, function (i, v) {
         let val = v.value.replace(/\r\n$|\n$|^\s+|\s+$/g, '');

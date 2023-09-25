@@ -37,7 +37,7 @@ function uploadExcelFile() {
 
     formData = new FormData();
     formData.append('file', input.files[0]);
-    console.log();
+
     modal.submit(
         {
             url: '/api/v1/import/create',
@@ -78,7 +78,7 @@ function createOrder() {
     });
 
     if (!form.valid()) return;
-    const data = parseSerializeArray(form.serializeArray());
+    const data = parseJsonData(form.serializeArray());
     modal.submit(
         {
             url: 'api/v1/order',
@@ -93,7 +93,7 @@ function createOrder() {
 function updateByPk() {
     const form = $('#modal form');
     if (!form) return;
-    const data = parseSerializeArray(form.serializeArray());
+    const data = parseJsonData(form.serializeArray());
     modal.submit(
         { url: '/api/v1/order/update', type: 'put', data: { order: JSON.stringify(data) } },
         (then = function () {

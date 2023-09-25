@@ -59,6 +59,11 @@ mark {
     }
 }
 
+.modal-body .download {
+    position: absolute;
+    transform: translateY(52px);
+}
+
 label.error {
     color: $text-danger;
     font-size: small;
