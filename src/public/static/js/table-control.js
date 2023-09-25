@@ -95,12 +95,20 @@ const initTable = function (tableId) {
 
 window.operateEvents = {
     'click .btn-modal': function (e, value, row, index) {
-        modal.show({
-            title: 'Sửa chữa',
-            body: '/api/v1/view/update',
-            submit: { class: 'btn btn-success', text: 'Cập nhật', handler: 'updateByPk' },
-            fields: row,
-        });
+        const preDisplay = () => {
+            $.each(row, function (k, v) {
+                if (v) $('#modal').find(`[name="${k}"]`).val(v);
+            });
+        };
+
+        modal.show(
+            {
+                title: 'Sửa chữa',
+                body: '/api/v1/view/update',
+                submit: { class: 'btn btn-success', text: 'Cập nhật', handler: 'updateByPk' },
+            },
+            preDisplay,
+        );
     },
 };
 

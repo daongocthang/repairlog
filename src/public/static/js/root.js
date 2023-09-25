@@ -66,7 +66,7 @@ function parseJsonData(array) {
 }
 
 const modal = {
-    show: function ({ title, body, submit, fields }) {
+    show: function ({ title, body, submit }, preDisplay) {
         const btSubmit = $('#modal .modal-footer').children().last();
 
         btSubmit.removeClass();
@@ -76,12 +76,7 @@ const modal = {
         $('#modal .modal-title').text(title);
 
         $('#modal .modal-body').load(body, function () {
-            // PreDisplay
-            if (fields) {
-                $.each(fields, function (k, v) {
-                    if (v) $('#modal').find(`[name="${k}"]`).val(v);
-                });
-            }
+            if (preDisplay instanceof Function) preDisplay();
 
             $('#modal').modal({ show: true });
         });

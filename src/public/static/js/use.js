@@ -13,6 +13,15 @@ const ErrMsg = {
     length: 'Mã phiếu không hợp lệ',
 };
 
+$('#navbarContent .launch-modal').on('click', function () {
+    const { action } = $(this).data();
+    let href = '/api/v1/download?file={0}}'.f(action === 'update' ? 'mau_sua_chua.xlsx' : 'mau_tiep_nhan.xlsx');
+    modal.show($(this).data(), function () {
+        $(this).find('.download a').attr('href', href);
+        console.log($(this).find('.download small a'));
+    });
+});
+
 function removeAllSelections() {
     if (!selections) return;
     const form = $('#modal form');
