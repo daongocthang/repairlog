@@ -76,7 +76,7 @@ const updateByPk = (req, res) => {
             res.status(500);
 
             let message = R.message.update.er;
-            if (count == 0) message = R.message.notfound;
+            if (count == 0) message = formatter.str(R.message.notfound, 'Mã phiếu');
 
             res.send({ message, type: 'error' });
         });

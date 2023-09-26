@@ -59,7 +59,7 @@ function uploadExcelFile() {
             processData: false,
             beforeSend: function () {
                 modal.dismiss();
-                $('#loader').modal('show');
+                if (input.files[0]) $('#loader').modal('show');
             },
         },
         function () {

@@ -10,7 +10,7 @@ const Order = db.WorkOrder;
 export const upload = async (req, res) => {
     try {
         if (req.file == undefined) {
-            return res.status(400).send({ message: 'Please upload an excel file.', type: 'error' });
+            return res.status(400).send({ message: formatter.str(R.message.notfound, 'File'), type: 'error' });
         }
 
         const path = __basedir + '/uploads/' + req.file.filename;

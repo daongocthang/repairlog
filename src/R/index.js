@@ -17,7 +17,7 @@ const message = {
         er: `Giao dịch không thể chuyển trạng thái`,
     },
     exists: 'Mã phiếu đang tồn tại',
-    notfound: 'Mã phiếu không tồn tại',
+    notfound: '{0} không tồn tại',
     nothing: 'Không có dữ liệu mới',
     invalid: 'Mã phiếu không hợp lệ',
 };
