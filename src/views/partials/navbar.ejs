@@ -21,9 +21,10 @@
                         class="dropdown-item launch-modal"
                         href="#"
                         data-title="Tiếp nhận theo file"
-                        data-body="/api/v1/view/import"
+                        data-body="<%=baseURL%>/view/import"
                         data-submit='{"class":"btn btn-primary","text":"Upload","handler":"uploadExcelFile"}'
-                        data-action="create"
+                        data-action="<%=baseURL%>/upload/create"
+                        data-attached="<%=baseURL%>/download?file=mau_tiep_nhan.xlsx"
                         >Tiếp nhận</a
                     >
                     <div class="dropdown-divider"></div>
@@ -31,9 +32,10 @@
                         class="dropdown-item launch-modal"
                         href="#"
                         data-title="Sửa chữa theo file"
-                        data-body="/api/v1/view/import"
+                        data-body="<%=baseURL%>/view/import"
                         data-submit='{"class":"btn btn-primary","text":"Upload","handler":"uploadExcelFile"}'
-                        data-action="update"
+                        data-action="<%=baseURL%>/upload/update"
+                        data-attached="<%=baseURL%>/download?file=mau_sua_chua.xlsx"
                         >Sửa chữa</a
                     >
                 </div>

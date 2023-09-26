@@ -14,11 +14,13 @@ const ErrMsg = {
 };
 
 $('#navbarContent .launch-modal').on('click', function () {
-    const { action } = $(this).data();
-    let href = '/api/v1/download?file={0}}'.f(action === 'update' ? 'mau_sua_chua.xlsx' : 'mau_tiep_nhan.xlsx');
-    modal.show($(this).data(), function () {
-        $(this).find('.download a').attr('href', href);
-        console.log($(this).find('.download small a'));
+    const { action, attached } = $(this).data();
+    modal.show({
+        ...$(this).data(),
+        afterLoad: function () {
+            $('#modal form').attr('action', action);
+            $('.download__url').attr('href', attached);
+        },
     });
 });
 
@@ -42,6 +44,7 @@ function removeAllSelections() {
 function uploadExcelFile() {
     const form = $('#modal form');
     if (!form) return;
+
     const input = form.find('input')[0];
 
     formData = new FormData();
@@ -49,7 +52,7 @@ function uploadExcelFile() {
 
     modal.submit(
         {
-            url: '/api/v1/import/create',
+            url: form.attr('action'),
             type: 'post',
             data: formData,
             contentType: false,
@@ -90,7 +93,7 @@ function createOrder() {
     const data = parseJsonData(form.serializeArray());
     modal.submit(
         {
-            url: 'api/v1/order',
+            url: form.attr('action'),
             type: 'post',
             data: { order: JSON.stringify(data) },
         },
@@ -104,7 +107,7 @@ function updateByPk() {
     if (!form) return;
     const data = parseJsonData(form.serializeArray());
     modal.submit(
-        { url: '/api/v1/order/update', type: 'put', data: { order: JSON.stringify(data) } },
+        { url: form.attr('action'), type: 'put', data: { order: JSON.stringify(data) } },
         (then = function () {
             notifyDataSetChanged();
         }),

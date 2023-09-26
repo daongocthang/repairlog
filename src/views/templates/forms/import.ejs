@@ -1,5 +1,5 @@
 <div class="mb-2">
-    <form enctype="multipart/form-data" method="post" action="/api/v1/import">
+    <form enctype="multipart/form-data" method="post" action="<%=baseURL%>/import">
         <input
             type="file"
             name="file"
@@ -7,8 +7,8 @@
         />
     </form>
 </div>
-<div class="download">
+<div class="download__container">
     <small>
-        <a href="/api/v1/download?file=mau_tiep_nhan.xlsx" class="download-url">Tải file mẫu tại đáy</a>
+        <a href="#" class="download__url">Tải file mẫu tại đáy</a>
     </small>
 </div>

@@ -4,7 +4,7 @@
             href="#"
             class="btn btn-default btn-modal"
             data-title="Tiếp nhận"
-            data-body="/api/v1/view/create"
+            data-body="<%=baseURL%>/view/create"
             data-submit='{"class":"btn btn-primary","text": "Tiếp nhận","handler":"createOrder"}'
             ><i class="fa fa-plus"></i> Thêm
         </a>
@@ -13,7 +13,7 @@
             id="menuDel"
             class="btn btn-danger btn-modal disabled"
             data-title="Xóa dữ liệu"
-            data-body="/api/v1/view/delete"
+            data-body="<%=baseURL%>/view/delete"
             data-submit='{"class":"btn btn-danger","text": "Xóa","handler":"removeAllSelections"}'
             ><i class="fa fa-trash"></i> Xóa
         </a>
@@ -23,7 +23,7 @@
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tác vụ khác</button>
             <div class="dropdown-menu">
                 <% status.forEach(s => { %>
-                <a class="dropdown-item hidden" href="#" data-url="/api/v1/order/status/<%= s.slug %>">
+                <a class="dropdown-item hidden" href="#" data-url="<%=baseURL%>/order/status/<%= s.slug %>">
                     Đánh dấu <%= s.name %>
                 </a>
                 <% }) %>

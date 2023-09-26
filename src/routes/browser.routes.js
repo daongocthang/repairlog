@@ -8,10 +8,12 @@ export const BrowserRoutes = (app) => {
         res.redirect('/hom-nay');
     });
     app.get('/:slug', (req, res) => {
-        let { slug } = req.params;
+        const { slug } = req.params;
+        const baseURL = '/api/v1';
         res.render('pages/index', {
-            dataTable: '/api/v1/data/' + slug,
+            dataTable: baseURL + '/data/' + slug,
             status: R.status,
+            baseURL,
         });
     });
 

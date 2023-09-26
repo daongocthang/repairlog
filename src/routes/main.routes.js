@@ -7,7 +7,7 @@ import db from '../models';
 
 const router = Router();
 export const MainRoutes = (app) => {
-    router.post('/import/:type', uploadFile.single('file'), excelUpload);
+    router.post('/upload/:type', uploadFile.single('file'), excelUpload);
     router.get('/download', file.download);
 
     router.get('/data/:slug', order.findBySlug);
@@ -22,7 +22,7 @@ export const MainRoutes = (app) => {
         const { name } = req.params;
         const methods = await db.Method.findAll();
 
-        res.render('templates/forms/' + name, { methods: methods });
+        res.render('templates/forms/' + name, { methods: methods, baseURL: '/api/v1' });
     });
 
     app.use('/api/v1/', router);
