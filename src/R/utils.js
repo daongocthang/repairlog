@@ -23,6 +23,23 @@ export const sanifyInput = (s) => {
             .replace(/\r\n$|^\s+|\s+$/gm, '');
 };
 
+export const str = {
+    format: (s, ...args) => {
+        let i = args.length;
+        while (i--) {
+            s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), args[i]);
+        }
+        return s;
+    },
+    empty: (s) => !s || s.length === 0,
+    sanify: (s) => {
+        return s
+            .toString()
+            .replace(/[\u200B-\u200D\uFEFF]/g, '')
+            .replace(/\r\n$|^\s+|\s+$/gm, '');
+    },
+};
+
 export class TagBuilder {
     name;
     constraints = {};

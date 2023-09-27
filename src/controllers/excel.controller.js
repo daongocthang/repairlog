@@ -4,6 +4,7 @@ import R from '../R';
 import { formatter } from '../R/utils';
 import { isEmpty, sanifyInput } from '../R/utils';
 import db from '../models';
+import { Workbook } from 'exceljs';
 
 const Order = db.WorkOrder;
 
@@ -112,4 +113,15 @@ const bulkUpdate = (rows, res) => {
                 message: err.message || 'Fail to import to database.',
             });
         });
+};
+
+const download = (columns, rows, out) => {
+    const wb = new Workbook();
+    const ws = wb.addWorksheet('Error');
+    ws.columns = columns;
+    ws.addRows(rows);
+
+    // res is a Stream object
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', formatter.str('attachment; filename={0}.xlsx', out));
 };
