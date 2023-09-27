@@ -1,17 +1,17 @@
 import fs from 'fs';
 import readXlsxFile from 'read-excel-file/node';
 import R from '../R';
-import { formatter } from '../R/utils';
-import { isEmpty, sanifyInput } from '../R/utils';
 import db from '../models';
 import { Workbook } from 'exceljs';
+import { str } from '../R/utils';
+import moment from 'moment/moment';
 
 const Order = db.WorkOrder;
 
 export const upload = async (req, res) => {
     try {
         if (req.file == undefined) {
-            return res.status(400).send({ message: formatter.str(R.message.notfound, 'File'), type: 'error' });
+            return res.status(400).send({ message: str.format(R.message.notfound, 'File'), type: 'error' });
         }
 
         const path = __basedir + '/uploads/' + req.file.filename;
@@ -41,7 +41,7 @@ export const upload = async (req, res) => {
 const bulkCreate = async (rows, res) => {
     let pendingOrders = [];
     let invalidOrders = [];
-    const constriants = { receiptNo: rows.map((row) => sanifyInput(row[0])).filter((s) => !isEmpty(s)) };
+    const constriants = { receiptNo: rows.map((row) => str.sanify(row[0])).filter((s) => !isEmpty(s)) };
 
     let results = await Order.findAll({
         attributes: ['receiptNo'],
@@ -53,16 +53,16 @@ const bulkCreate = async (rows, res) => {
 
     rows.forEach((row) => {
         let newOrder = {
-            receiptNo: sanifyInput(row[0]),
-            model: sanifyInput(row[1]),
-            serial: sanifyInput(row[2]),
-            description: sanifyInput(row[3]),
+            receiptNo: str.sanify(row[0]),
+            model: str.sanify(row[1]),
+            serial: str.sanify(row[2]),
+            description: str.sanify(row[3]),
         };
 
         // Optional: classisy the orders
 
         const pk = newOrder.receiptNo;
-        if (isEmpty(pk)) {
+        if (str.empty(pk)) {
             newOrder.error = R.message.invalid;
             invalidOrders.push(newOrder);
         } else if (duplicates.includes(pk)) {
@@ -76,13 +76,27 @@ const bulkCreate = async (rows, res) => {
     Order.bulkCreate(pendingOrders, {
         ignoreDuplicates: true,
     })
-        .then(() => {
+        .then(async () => {
             // TODO: export file of invalid rows
             console.log(invalidOrders);
             let type = pendingOrders.length == rows.length ? 'success' : 'error';
+
+            const wb = new Workbook();
+            const ws = wb.addWorksheet('Error');
+            ws.columns = new ColsBuilder()
+                .append('Mã phiếu', 'receiptNo', 32)
+                .append('Tên TB', 'model', 15)
+                .append('Serial', 'serial', 15)
+                .append('Mô tả lỗi', 'description', 32)
+                .append('Error', 'error', 32)
+                .build();
+            ws.addRows(invalidOrders);
+            const fname = 'Error__' + moment().format('YYMMDDHHmmss');
+            await sendXlsxFile(fname, wb, res);
+
             res.status(200).send({
                 // message: 'Uploaded the file successfully: ' + req.file.originalname,
-                message: formatter.str(R.message.create.ok, pendingOrders.length + '/' + rows.length),
+                message: str.format(R.message.create.ok, pendingOrders.length + '/' + rows.length),
                 type,
             });
         })
@@ -115,13 +129,20 @@ const bulkUpdate = (rows, res) => {
         });
 };
 
-const download = (columns, rows, out) => {
-    const wb = new Workbook();
-    const ws = wb.addWorksheet('Error');
-    ws.columns = columns;
-    ws.addRows(rows);
-
-    // res is a Stream object
+const sendXlsxFile = async (name, wb, res) => {
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', formatter.str('attachment; filename={0}.xlsx', out));
+    res.setHeader('Content-Disposition', str.format('attachment; filename={0}.xlsx', name));
+
+    await wb.xlsx.write(res);
 };
+
+class ColsBuilder {
+    #cols = [];
+    append(header, key, width = 15) {
+        this.#cols.push({ header, key, width });
+        return this;
+    }
+    build() {
+        return this.#cols;
+    }
+}

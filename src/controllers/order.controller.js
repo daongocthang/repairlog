@@ -1,6 +1,6 @@
 import db from '../models';
 import R from '../R';
-import { formatter, isObjectEmpty } from '../R/utils';
+import { str, isObjectEmpty } from '../R/utils';
 import { Sequelize } from 'sequelize';
 
 const Order = db.WorkOrder;
@@ -34,7 +34,7 @@ const removeAllSelections = (req, res) => {
         },
     })
         .then(() => {
-            res.status(200).send({ message: formatter.str(R.message.remove.ok, count), type: 'success' });
+            res.status(200).send({ message: str.format(R.message.remove.ok, count), type: 'success' });
         })
         .catch(() => {
             res.status(500).send({ message: R.message.remove.er, type: 'error' });
@@ -46,7 +46,7 @@ const create = (req, res) => {
 
     Order.create(newOrder)
         .then(() => {
-            res.status(200).send({ message: formatter.str(R.message.create.ok, 1), type: 'success' });
+            res.status(200).send({ message: str.format(R.message.create.ok, 1), type: 'success' });
         })
         .catch(async (e) => {
             const count = await Order.count({ where: { receiptNo: newOrder.receiptNo } });
@@ -69,14 +69,14 @@ const updateByPk = (req, res) => {
     }
     Order.update(order, { where: { receiptNo } })
         .then(() => {
-            res.status(200).send({ message: formatter.str(R.message.update.ok, 1), type: 'success' });
+            res.status(200).send({ message: str.format(R.message.update.ok, 1), type: 'success' });
         })
         .catch(async (e) => {
             const count = await Order.count({ where: { receiptNo: newOrder.receiptNo } });
             res.status(500);
 
             let message = R.message.update.er;
-            if (count == 0) message = formatter.str(R.message.notfound, 'Mã phiếu');
+            if (count == 0) message = str.format(R.message.notfound, 'Mã phiếu');
 
             res.send({ message, type: 'error' });
         });
@@ -97,7 +97,7 @@ const bulkChangeStatus = (req, res) => {
         },
     )
         .then(() => {
-            const message = formatter.str(R.message.status.ok, constraints.receiptNo.length, newStatus);
+            const message = str.format(R.message.status.ok, constraints.receiptNo.length, newStatus);
             res.status(200).send({ message, type: 'success' });
         })
         .catch((e) => {
