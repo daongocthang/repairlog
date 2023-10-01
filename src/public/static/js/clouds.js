@@ -3,7 +3,7 @@ function renderClouds(update) {
         if (status === 'success') {
             const root = $('#clouds');
             const htmlStr =
-                '<li class="nav-item hidden"><a class="nav-link" href="/clouds/{0}">{1} <span class="badge badge-{3}">{2}</span></a></li>';
+                '<li class="nav-item hidden"><a class="nav-link" href="/clouds/{0}">{1}\t<span class="badge badge-{3}">{2}</span></a></li>';
             res.tags.forEach(function (elem) {
                 let { style, slug, name, count } = elem;
                 if (!update) root.append(htmlStr.f(slug, name, count, style));
