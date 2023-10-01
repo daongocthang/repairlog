@@ -13,13 +13,13 @@ const message = {
         er: `Giao dịch không thể cập nhật`,
     },
     status: {
-        ok: `Có {0} giao dịch chuyển sang "{1}"`,
+        ok: `{0} giao dịch chuyển sang "{1}"`,
         er: `Giao dịch không thể chuyển trạng thái`,
     },
     exists: 'Mã phiếu đang tồn tại',
     notfound: '{0} không tồn tại',
     nothing: 'Không có dữ liệu mới',
-    invalid: 'Mã phiếu không hợp lệ',
+    invalid: '{0} không hợp lệ',
 };
 
 const status = ['đang sửa', 'chờ trả', 'kết thúc'].map((s) => {

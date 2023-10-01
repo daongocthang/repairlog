@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
 
-export const WorkOrder = (sequelize) =>
+export const Order = (sequelize) =>
     sequelize.define(
-        'WorkOrder',
+        'Order',
         {
             receiptNo: {
                 type: DataTypes.STRING,
@@ -16,6 +16,7 @@ export const WorkOrder = (sequelize) =>
             description: DataTypes.TEXT,
             newSerial: DataTypes.STRING,
             remark: DataTypes.TEXT,
+            warning: DataTypes.STRING,
             method: DataTypes.STRING,
             status: { type: DataTypes.STRING, defaultValue: 'đang sửa' },
         },

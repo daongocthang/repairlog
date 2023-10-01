@@ -111,3 +111,24 @@ const modal = {
         });
     },
 };
+
+// export Xslx file
+function exportXlsxFile(settings = { data, fileName, sheetName, widthCols: [{ wch: 10 }, { wch: 10 }] }) {
+    const { data, fileName, widthCols, sheetName } = settings;
+    var ws = XLSX.utils.json_to_sheet(data);
+    var wb = XLSX.utils.book_new();
+
+    if (widthCols) ws['!cols'] = widthCols;
+
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+    XLSX.writeFile(wb, fileName);
+}
+function getQueryParams(url) {
+    const paramArr = url.slice(url.indexOf('?') + 1).split('&');
+    const params = {};
+    paramArr.map((param) => {
+        const [key, val] = param.split('=');
+        params[key] = decodeURIComponent(val);
+    });
+    return params;
+}

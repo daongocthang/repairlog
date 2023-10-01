@@ -6,12 +6,13 @@ import { order, clouds, file } from '../controllers';
 import db from '../models';
 
 const router = Router();
-export const MainRoutes = (app) => {
+export default (app) => {
     router.post('/upload/:type', uploadFile.single('file'), excelUpload);
     router.get('/download', file.download);
 
-    router.get('/data/:slug', order.findBySlug);
-    router.post('/order', order.create);
+    router.get('/order/search', order.findByQuery);
+    router.get('/order/slug/:slug', order.findBySlug);
+    router.post('/order/create', order.create);
     router.put('/order/update', order.updateByPk);
     router.put('/order/status/:status', order.bulkChangeStatus);
     router.delete('/order', order.removeAllSelections);

@@ -7,13 +7,13 @@ const clouds = async (req, res) => {
     let tags = structuredClone(R.tags);
     tags.forEach((tag) => (tag.count = 0));
     try {
-        const countToday = await db.WorkOrder.count({
+        const countToday = await db.Order.count({
             where: {
                 createdAt: { [Op.gt]: new Date().setHours(0, 0, 0, 0) },
             },
         });
 
-        const queues = await db.WorkOrder.findAll({
+        const queues = await db.Order.findAll({
             attributes: ['method', 'status'],
             where: {
                 [Op.or]: [{ status: { [Op.notLike]: '%kết thúc%' } }],

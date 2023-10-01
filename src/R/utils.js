@@ -33,10 +33,11 @@ export const str = {
     },
     empty: (s) => !s || s.length === 0,
     sanify: (s) => {
-        return s
-            .toString()
-            .replace(/[\u200B-\u200D\uFEFF]/g, '')
-            .replace(/\r\n$|^\s+|\s+$/gm, '');
+        if (s)
+            return s
+                .toString()
+                .replace(/[\u200B-\u200D\uFEFF]/g, '')
+                .replace(/\r\n$|^\s+|\s+$/gm, '');
     },
 };
 

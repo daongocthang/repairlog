@@ -1,4 +1,4 @@
-<form method="POST" action="<%=baseURL%>/order">
+<form method="POST" action="<%=baseURL%>/order/create">
     <div class="form-group">
         <label class="control-label">Mã phiếu *</label>
         <input class="form-control" name="receiptNo" type="text" required exactlength="32" />
@@ -13,6 +13,6 @@
     </div>
     <div class="form-group">
         <label class="control-label">Mô tả lỗi</label>
-        <textarea class="form-control" name="remark"></textarea>
+        <textarea class="form-control" name="description"></textarea>
     </div>
 </form>

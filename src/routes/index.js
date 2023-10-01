@@ -1,9 +1,9 @@
-import { BrowserRoutes } from './browser.routes';
-import { MainRoutes } from './main.routes';
+import browser from './browser.routes';
+import api from './api.routes';
 
 const routes = (app) => {
-    MainRoutes(app);
-    BrowserRoutes(app);
+    api(app);
+    browser(app);
 };
 
 export default routes;

@@ -44,9 +44,16 @@ const initTable = function (tableId) {
                 sortable: true,
             },
             {
+                field: 'warning',
+                title: 'Cảnh báo',
+                sortable: true,
+            },
+            {
                 field: 'status',
                 title: 'Trạng thái',
                 sortable: true,
+                align: 'center',
+                formatter: statusFormatter,
             },
             {
                 field: 'createdAt',
@@ -113,6 +120,24 @@ function operateFomatter(value, row, index) {
     type="button">
     <i class="fa fa-pen"></i>
     </button>`;
+}
+
+function statusFormatter(value, row, index) {
+    const status = value.toLowerCase();
+    let type = '';
+    switch (status) {
+        case 'kết thúc':
+            type = 'success text-light';
+            break;
+        case 'chờ trả':
+            type = 'primary  text-light';
+            break;
+        default:
+            type = 'warning';
+            break;
+    }
+
+    return `<span class="badge bg-${type}">${value}</span>`;
 }
 
 function notifySelectionChanged() {

@@ -1,17 +1,28 @@
 import { Router } from 'express';
 import R from '../R';
+import url from 'url';
 
 const router = Router();
 
-export const BrowserRoutes = (app) => {
+export default (app) => {
     app.get('/', (req, res) => {
-        res.redirect('/hom-nay');
+        res.redirect('/clouds/hom-nay');
     });
-    app.get('/:slug', (req, res) => {
+    app.get('/clouds/:slug', (req, res) => {
         const { slug } = req.params;
         const baseURL = '/api/v1';
         res.render('pages/index', {
-            dataTable: baseURL + '/data/' + slug,
+            dataTable: baseURL + '/order/slug/' + slug,
+            status: R.status,
+            baseURL,
+        });
+    });
+
+    app.get('/search', (req, res) => {
+        const Url = req._parsedUrl;
+        const baseURL = '/api/v1';
+        res.render('pages/index', {
+            dataTable: baseURL + '/order/search/' + Url.search,
             status: R.status,
             baseURL,
         });

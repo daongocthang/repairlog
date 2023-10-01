@@ -1,12 +1,11 @@
 import fs from 'fs';
 import readXlsxFile from 'read-excel-file/node';
 import R from '../R';
-import db from '../models';
-import { Workbook } from 'exceljs';
 import { str } from '../R/utils';
-import moment from 'moment/moment';
+import db from '../models';
 
-const Order = db.WorkOrder;
+const Order = db.Order;
+const Method = db.Method;
 
 export const upload = async (req, res) => {
     try {
@@ -19,17 +18,15 @@ export const upload = async (req, res) => {
         let rows = await readXlsxFile(path);
         // console.log(rows);
         // res.send({ message: formatter.str(R.message.create.ok, rows.length) });
+        // console.log('[DEBUG] Params', rows);
 
         rows.shift();
 
         if (req.params.type === 'create') {
             await bulkCreate(rows, res);
+        } else if (req.params.type === 'update') {
+            await bulkUpdate(rows, res);
         }
-        //  else if (req.params.type === 'update') {
-        //     await bulkUpdate(rows, req, res);
-        // } else {
-        //     throw new Error('Not found any request');
-        // }
     } catch (e) {
         console.log(e);
         res.status(500).send({ message: 'Could not upload the file: ' + req.file.originalname });
@@ -40,8 +37,13 @@ export const upload = async (req, res) => {
 
 const bulkCreate = async (rows, res) => {
     let pendingOrders = [];
-    let invalidOrders = [];
-    const constriants = { receiptNo: rows.map((row) => str.sanify(row[0])).filter((s) => !isEmpty(s)) };
+    const constriants = { receiptNo: rows.map((row) => str.sanify(row[0])).filter((s) => !str.empty(s)) };
+    const ws = new Worksheet('ImportError');
+    ws.addColumn({ header: 'Mã phiếu', key: 'receiptNo', width: 32 })
+        .addColumn({ header: 'Tên TB', key: 'model', width: 32 })
+        .addColumn({ header: 'Serial', key: 'serial', width: 18 })
+        .addColumn({ header: 'Mô tả lỗi', key: 'description', width: 32 })
+        .addColumn({ header: 'Thông báo lỗi', key: 'error', width: 20 });
 
     let results = await Order.findAll({
         attributes: ['receiptNo'],
@@ -63,11 +65,11 @@ const bulkCreate = async (rows, res) => {
 
         const pk = newOrder.receiptNo;
         if (str.empty(pk)) {
-            newOrder.error = R.message.invalid;
-            invalidOrders.push(newOrder);
+            newOrder.error = str.format(R.message.invalid, 'Mã phiếu');
+            ws.addRow(newOrder);
         } else if (duplicates.includes(pk)) {
             newOrder.error = R.message.exists;
-            invalidOrders.push(newOrder);
+            ws.addRow(newOrder);
         } else {
             pendingOrders.push(newOrder);
         }
@@ -76,26 +78,12 @@ const bulkCreate = async (rows, res) => {
     Order.bulkCreate(pendingOrders, {
         ignoreDuplicates: true,
     })
-        .then(async () => {
-            // TODO: export file of invalid rows
-            console.log(invalidOrders);
-            let type = pendingOrders.length == rows.length ? 'success' : 'error';
-
-            const wb = new Workbook();
-            const ws = wb.addWorksheet('Error');
-            ws.columns = new ColsBuilder()
-                .append('Mã phiếu', 'receiptNo', 32)
-                .append('Tên TB', 'model', 15)
-                .append('Serial', 'serial', 15)
-                .append('Mô tả lỗi', 'description', 32)
-                .append('Error', 'error', 32)
-                .build();
-            ws.addRows(invalidOrders);
-            const fname = 'Error__' + moment().format('YYMMDDHHmmss');
-            await sendXlsxFile(fname, wb, res);
+        .then(() => {
+            let type = ws.empty() ? 'success' : 'error';
+            let datasheet = ws.empty() ? undefined : ws.json();
 
             res.status(200).send({
-                // message: 'Uploaded the file successfully: ' + req.file.originalname,
+                datasheet,
                 message: str.format(R.message.create.ok, pendingOrders.length + '/' + rows.length),
                 type,
             });
@@ -107,19 +95,61 @@ const bulkCreate = async (rows, res) => {
         });
 };
 
-const bulkUpdate = (rows, res) => {
-    let field = req.params.field;
-    let value = {};
+const bulkUpdate = async (rows, res) => {
+    const constriants = { receiptNo: rows.map((row) => str.sanify(row[0])).filter((s) => !str.empty(s)) };
     let promises = [];
+    let results;
+
+    const ws = new Worksheet('ImportError');
+    ws.addColumn({ header: 'Mã phiếu', key: 'receiptNo', width: 32 })
+        .addColumn({ header: 'Serial Mới', key: 'model', width: 18 })
+        .addColumn({ header: 'Biện pháp', key: 'serial', width: 18 })
+        .addColumn({ header: 'Chi tiết SC', key: 'description', width: 18 })
+        .addColumn({ header: 'Thông báo lỗi', key: 'error', width: 18 });
+
+    results = await Method.findAll({ raw: true });
+
+    const methods = results.map((row) => row.name);
+
+    results = await Order.findAll({
+        attributes: ['receiptNo'],
+        where: constriants,
+        raw: true,
+    });
+
+    const availbilities = results.map((row) => row.receiptNo);
 
     rows.forEach((row) => {
-        value[field] = row[1];
-        promises.push(Order.update(value, { where: { receiptNo: row[0] } }));
+        let newOrder = {
+            receiptNo: str.sanify(row[0]),
+            newSerial: str.sanify(row[1]),
+            method: str.sanify(row[2]),
+            remark: str.sanify(row[3]),
+        };
+
+        const method = newOrder.method;
+        const pk = newOrder.receiptNo;
+
+        if (!availbilities.includes(pk)) {
+            newOrder.error = str.format(R.message.notfound, 'Mã phiếu');
+            ws.addRow(newOrder);
+        } else if (str.empty(method) || !methods.includes(method.toLowerCase())) {
+            newOrder.error = str.format(R.message.invalid, 'Biện pháp SC');
+            ws.addRow(newOrder);
+        } else {
+            promises.push(Order.update(newOrder, { where: { receiptNo: row[0] } }));
+        }
     });
+
+    const count = promises.length;
     Promise.all(promises)
         .then(() => {
+            let type = ws.empty() ? 'success' : 'error';
+            let datasheet = ws.empty() ? undefined : ws.json();
             res.status(200).send({
-                message: 'Uploaded the file successfully: ' + req.file.originalname,
+                datasheet,
+                message: str.format(R.message.update.ok, count + '/' + rows.length),
+                type,
             });
         })
         .catch((err) => {
@@ -129,20 +159,49 @@ const bulkUpdate = (rows, res) => {
         });
 };
 
-const sendXlsxFile = async (name, wb, res) => {
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', str.format('attachment; filename={0}.xlsx', name));
-
-    await wb.xlsx.write(res);
-};
-
-class ColsBuilder {
+class Worksheet {
+    #rows = [];
     #cols = [];
-    append(header, key, width = 15) {
-        this.#cols.push({ header, key, width });
+    #sheetName;
+
+    constructor(sheetName = 'Sheet1') {
+        this.#sheetName = sheetName;
+    }
+
+    addColumn(col = { header, width }) {
+        this.#cols.push(col);
         return this;
     }
-    build() {
-        return this.#cols;
+
+    addColumns(cols) {
+        this.#cols.push(...cols);
+    }
+
+    addRow(row) {
+        this.#rows.push(row);
+        return this;
+    }
+
+    addRows(rows) {
+        this.#rows.push(...rows);
+    }
+
+    empty() {
+        return this.#rows.length == 0;
+    }
+
+    json() {
+        const wcols = this.#cols.map((c) => ({ wch: c.width }));
+        const data = this.#rows.map((row) => {
+            let newRow = {};
+            this.#cols.forEach((col) => {
+                const value = row[col.key];
+                newRow[col.header] = value ? value : '';
+            });
+
+            return newRow;
+        });
+
+        return { data, sheetName: this.#sheetName, widthCols: wcols };
     }
 }

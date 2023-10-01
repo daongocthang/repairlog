@@ -5,8 +5,8 @@ $('.dt-picker').datepicker({
     disableTouchKeyboard: true,
     keyboardNavigation: false,
 });
-$('.dt-0').datepicker('update', moment().toDate());
-$('.dt-3').datepicker('update', moment().subtract(3, 'months').toDate());
+$('.end-date').datepicker('update', moment().toDate());
+$('.start-date').datepicker('update', moment().subtract(3, 'months').toDate());
 
 const ErrMsg = {
     required: 'Bắt buộc nhập mã phiếu',
@@ -62,8 +62,13 @@ function uploadExcelFile() {
                 if (input.files[0]) $('#loader').modal('show');
             },
         },
-        function () {
+        function (res) {
             notifyDataSetChanged();
+            const { datasheet, type } = res;
+            if (type === 'success') return;
+
+            const fileName = 'ImportError_{0}.xlsx'.f(moment().format('YYMMDDhhmmss'));
+            exportXlsxFile({ fileName, ...datasheet });
         },
     );
 }
@@ -113,3 +118,35 @@ function updateByPk() {
         }),
     );
 }
+
+function rememberSearch() {
+    const params = getQueryParams(window.location.href);
+    const firstCloud = $('#clouds li:first-child');
+    if (window.location.pathname !== '/search') {
+        firstCloud.addClass('hidden');
+        return;
+    }
+
+    firstCloud.removeClass('hidden');
+
+    const root = $('.search-box');
+    $.each(params, function (k, v) {
+        root.find(`[name="${k}"]`).val(v);
+    });
+    root.find(`[name="value"]`).prop(`disabled`, root.find(`[name="key"]`).val() === 'all');
+    root.find('.dt-picker').each(function () {
+        $(this).datepicker('update', $(this).val());
+    });
+}
+
+$('.search-box select')
+    .on('change', function () {
+        const inputSearch = $('.search-box').find(`[name="value"]`);
+        inputSearch.prop(`disabled`, $(this).val() === 'all');
+        console.log($(this).val());
+    })
+    .trigger('change');
+
+$(function () {
+    rememberSearch();
+});

@@ -1,11 +1,36 @@
+import moment from 'moment/moment';
 import db from '../models';
 import R from '../R';
 import { str, isObjectEmpty } from '../R/utils';
-import { Sequelize } from 'sequelize';
+import { Sequelize, Op } from 'sequelize';
 
-const Order = db.WorkOrder;
+const Order = db.Order;
 
 const dateFormatter = [Sequelize.fn('DATE_FORMAT', Sequelize.col('createdAt'), '%d-%m-%Y %H:%i:%S'), 'createdAt'];
+
+const findByQuery = (req, res) => {
+    const { start, end, key, value } = req.query;
+    let constraints = {};
+    const startDate = moment(start, 'DD-MM-YYYY');
+    const endDate = moment(end, 'DD-MM-YYYY').endOf('day');
+    const applyValue = str.empty(value) ? null : value;
+
+    constraints.createdAt = { [Op.between]: [startDate, endDate] };
+    if (key !== 'all') constraints[key] = applyValue;
+
+    Order.findAll({
+        attributes: {
+            include: [dateFormatter],
+        },
+        where: constraints,
+    })
+        .then((data) => {
+            res.status(200).send(data);
+        })
+        .catch((e) => {
+            res.status(500).send({ message: e.message || 'Some error occured.' });
+        });
+};
 
 const findBySlug = async (req, res) => {
     const constraints = R.tags.find((tag) => tag.slug === req.params.slug).constraints;
@@ -106,6 +131,7 @@ const bulkChangeStatus = (req, res) => {
 };
 
 export default {
+    findByQuery,
     findBySlug,
     removeAllSelections,
     create,
