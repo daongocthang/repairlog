@@ -7,14 +7,14 @@ import { TagBuilder } from './R/utils';
 import { Op } from 'sequelize';
 import R from './R';
 
-global.__basedir = __dirname + '/public';
+global.__basedir = './public';
 
 const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
-app.use(express.static(__dirname + '/public/static'));
+app.use(express.static('./public/static'));
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));

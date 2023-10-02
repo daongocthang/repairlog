@@ -13,10 +13,16 @@ const findByQuery = (req, res) => {
     let constraints = {};
     const startDate = moment(start, 'DD-MM-YYYY');
     const endDate = moment(end, 'DD-MM-YYYY').endOf('day');
-    const applyValue = str.empty(value) ? null : value;
+    const valueSearch = str.empty(value) ? null : str.sanify(value);
 
     constraints.createdAt = { [Op.between]: [startDate, endDate] };
-    if (key !== 'all') constraints[key] = applyValue;
+    if (key !== 'all') {
+        if (key === 'serial') {
+            Object.assign(constraints, {
+                [Op.or]: [{ serial: { [Op.substring]: valueSearch } }, { newSerial: { [Op.substring]: valueSearch } }],
+            });
+        } else constraints[key] = { [Op.substring]: valueSearch };
+    }
 
     Order.findAll({
         attributes: {

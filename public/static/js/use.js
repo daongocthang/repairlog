@@ -131,7 +131,7 @@ function rememberSearch() {
 
     const root = $('.search-box');
     $.each(params, function (k, v) {
-        root.find(`[name="${k}"]`).val(v);
+        root.find(`[name="${k}"]`).val(v.trim());
     });
     root.find(`[name="value"]`).prop(`disabled`, root.find(`[name="key"]`).val() === 'all');
     root.find('.dt-picker').each(function () {
@@ -143,7 +143,6 @@ $('.search-box select')
     .on('change', function () {
         const inputSearch = $('.search-box').find(`[name="value"]`);
         inputSearch.prop(`disabled`, $(this).val() === 'all');
-        console.log($(this).val());
     })
     .trigger('change');
 

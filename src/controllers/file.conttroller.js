@@ -1,6 +1,5 @@
 const download = (req, res) => {
     const fileName = req.query.file;
-    console.log(res);
     const storagePath = __basedir + '/assets/';
 
     res.download(storagePath + fileName, fileName, (er) => {

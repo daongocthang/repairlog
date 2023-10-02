@@ -4,8 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon --inspect --exec babel-node src/index.js",
-        "watch": "node-sass -w src/scss/ -o src/public/static/css/",
+        "start": "nodemon --inspect --exec babel-node ./src/index.js",
+        "watch": "node-sass -w ./scss/ -o ./public/static/css/",
         "test": "echo \"Error: no test specified\" && exit 1",
         "clean": "rm -rf build && mkdir build",
         "build:babel": "babel ./src -d ./build --copy-files",

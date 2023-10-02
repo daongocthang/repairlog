@@ -16,9 +16,6 @@ export const upload = async (req, res) => {
         const path = __basedir + '/uploads/' + req.file.filename;
 
         let rows = await readXlsxFile(path);
-        // console.log(rows);
-        // res.send({ message: formatter.str(R.message.create.ok, rows.length) });
-        // console.log('[DEBUG] Params', rows);
 
         rows.shift();
 
@@ -28,7 +25,6 @@ export const upload = async (req, res) => {
             await bulkUpdate(rows, res);
         }
     } catch (e) {
-        console.log(e);
         res.status(500).send({ message: 'Could not upload the file: ' + req.file.originalname });
     } finally {
         if (req.file) fs.unlinkSync(req.file.path);

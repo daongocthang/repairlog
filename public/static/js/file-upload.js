@@ -2,7 +2,6 @@ $('#form').submit(function () {
     $('#status').empty().text('File is uploading...');
     $(this).ajaxSubmit({
         error: function (err) {
-            console.log(err);
             $('#status').empty().text(err.responseJSON.message);
         },
 
