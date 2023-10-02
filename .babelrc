@@ -10,5 +10,6 @@
             }
         ],
         ["@babel/plugin-transform-runtime"]
-    ]
+    ],
+    "ignore": ["**/public/static"]
 }

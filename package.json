@@ -4,13 +4,13 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon --inspect --exec babel-node ./src/index.js",
-        "watch": "node-sass -w ./scss/ -o ./public/static/css/",
+        "start": "nodemon --inspect --exec babel-node src/index.js",
+        "watch": "node-sass -w scss/ -o src/public/static/css/",
         "test": "echo \"Error: no test specified\" && exit 1",
         "clean": "rm -rf build && mkdir build",
-        "build:babel": "babel ./src -d ./build --copy-files",
+        "build:babel": "babel src -d build --copy-files",
         "build": "npm run clean && npm run build:babel",
-        "production": "node ./build/index.js"
+        "production": "node build/index.js"
     },
     "author": "",
     "license": "ISC",
