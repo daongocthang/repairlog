@@ -6,11 +6,16 @@
     "scripts": {
         "start": "nodemon --inspect --exec babel-node src/index.js",
         "watch": "node-sass -w src/scss/ -o src/public/static/css/",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "clean": "rm -rf build && mkdir build",
+        "build:babel": "babel ./src -d ./build --copy-files",
+        "build": "npm run clean && npm run build:babel",
+        "production": "node ./build/index.js"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@babel/runtime": "^7.23.1",
         "body-parser": "^1.20.2",
         "cors": "^2.8.5",
         "dotenv": "^16.3.1",
@@ -25,8 +30,10 @@
         "slugify": "^1.6.6"
     },
     "devDependencies": {
+        "@babel/cli": "^7.23.0",
         "@babel/core": "^7.22.10",
         "@babel/node": "^7.22.10",
+        "@babel/plugin-transform-runtime": "^7.22.15",
         "@babel/preset-env": "^7.22.10",
         "babel-plugin-module-resolver": "^5.0.0",
         "node-sass": "^9.0.0",
