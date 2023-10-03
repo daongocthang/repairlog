@@ -1,0 +1,13 @@
+**/node_modules
+**/.vscode
+**/scss
+**/src
+**/.babelrc
+**/.env
+**/.dockerignore
+**/.git*
+**/.prettierrc
+**/Docker*
+**/docker*
+**/package*
+**/compose*
