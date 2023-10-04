@@ -8,6 +8,5 @@
 **/.git*
 **/.prettierrc
 **/Docker*
-**/docker*
-**/package*
 **/compose*
+**/docker-compose*

@@ -9,10 +9,10 @@ services:
         container_name: repairlog
         restart: unless-stopped
         env_file:
-            - ./.emv
+            - ./.env
         environment:
             - DB_HOST=localhost
-            - DB_USER=root
+            - DB_USER=superuser
             - DB_PASSWORD=1234
             - DB_NAME=mockdb
             - DB_PORT=3306
