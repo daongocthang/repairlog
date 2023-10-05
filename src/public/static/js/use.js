@@ -31,7 +31,7 @@ function removeAllSelections() {
 
     modal.submit(
         {
-            url: 'api/v1/order',
+            url: '/api/v1/order',
             type: 'delete',
             data: { selections: JSON.stringify(selections) },
         },

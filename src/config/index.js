@@ -9,6 +9,7 @@ export const dbConfig = {
     DB: process.env.DB_NAME,
     port: process.env.DB_PORT,
     dialect: 'mysql',
+    timezone: '+07:00',
     pool: {
         max: 5,
         min: 0,

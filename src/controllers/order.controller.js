@@ -72,8 +72,15 @@ const removeAllSelections = (req, res) => {
         });
 };
 
-const create = (req, res) => {
+const create = async (req, res) => {
     const newOrder = JSON.parse(req.body.order);
+    if (!str.empty(newOrder.serial)) {
+        const serialsFromLast35days = await filterAvailableSerials([newOrder.serial], 35);
+        if (serialsFromLast35days.length > 0) {
+            newOrder.warning = 'QL30';
+            newOrder.method = 'khác';
+        }
+    }
 
     Order.create(newOrder)
         .then(() => {
@@ -136,7 +143,21 @@ const bulkChangeStatus = (req, res) => {
         });
 };
 
-const findDuplicates = (array, interval) => {};
+export const filterAvailableSerials = async (serials, interval) => {
+    const results = await Order.findAll({
+        attributes: ['serial', 'newSerial'],
+        where: {
+            createdAt: { [Op.gte]: moment().subtract(interval, 'days').toDate() },
+            [Op.or]: [{ serial: serials }, { newSerial: serials }],
+        },
+        raw: true,
+    });
+
+    const arr1 = results.map((row) => row.serial);
+    const arr2 = results.map((row) => row.newSerial);
+
+    return arr1.concat(arr2);
+};
 
 export default {
     findByQuery,

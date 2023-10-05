@@ -7,6 +7,7 @@ const sequelize = new Sequelize(cnf.DB, cnf.USER, cnf.PASSWORD, {
     host: cnf.HOST,
     dialect: cnf.dialect,
     operatorsAliases: false,
+    timezone: cnf.timezone,
     pool: cnf.pool,
 });
 

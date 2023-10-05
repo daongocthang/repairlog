@@ -1,4 +1,5 @@
 import multer from 'multer';
+import fs from 'fs';
 
 const fileFilter = (req, file, cb) => {
     if (file.mimetype.includes('excel') || file.mimetype.includes('spreadsheetml')) {
@@ -10,7 +11,11 @@ const fileFilter = (req, file, cb) => {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, __basedir + '/uploads/');
+        const path = __basedir + '/uploads/';
+        if (!fs.existsSync(path)) {
+            fs.mkdirSync(path);
+        }
+        cb(null, path);
     },
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}-${file.originalname}`);

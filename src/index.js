@@ -24,7 +24,7 @@ models.sequelize.sync().then(async () => {
     let methods = await models.Method.findAll();
     R.tags.push(
         ...methods.map((m) => {
-            return TagBuilder.build(m.name, { method: m.name, status: { [Op.notLike]: '%chờ trả%' } });
+            return TagBuilder.build(m.name, { method: m.name, status: { [Op.like]: '%đang sửa%' } });
         }),
     );
 });

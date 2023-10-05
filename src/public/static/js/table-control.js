@@ -3,6 +3,7 @@ var selections = [];
 const initTable = function (tableId) {
     $(tableId).bootstrapTable({
         icons: { clearSearch: 'glyphicon-remove' },
+        exportTypes: ['excel'],
         columns: [
             {
                 field: 'state',
@@ -47,6 +48,7 @@ const initTable = function (tableId) {
                 field: 'warning',
                 title: 'Cảnh báo',
                 sortable: true,
+                formatter: warningFormatter,
             },
             {
                 field: 'status',
@@ -140,6 +142,10 @@ function statusFormatter(value, row, index) {
     return `<span class="badge bg-${type}">${value}</span>`;
 }
 
+function warningFormatter(value, row, index) {
+    if (value !== null) return `<span class="text-danger font-weight-bold">${value}</span>`;
+}
+
 function notifySelectionChanged() {
     if (selections.length) {
         $('#menuOthers .dropdown-item').removeClass('hidden');
@@ -157,6 +163,7 @@ function notifyDataSetChanged() {
     selections = [];
     notifySelectionChanged();
     $('#table').bootstrapTable('refresh');
+    $('.search input').select();
 }
 
 function loadingTemplate() {

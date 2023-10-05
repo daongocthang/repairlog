@@ -3,6 +3,7 @@ import readXlsxFile from 'read-excel-file/node';
 import R from '../R';
 import { str } from '../R/utils';
 import db from '../models';
+import { filterAvailableSerials } from './order.controller';
 
 const Order = db.Order;
 const Method = db.Method;
@@ -52,16 +53,7 @@ const bulkCreate = async (rows, res) => {
 
     const serials = rows.map((row) => str.sanify(row[2])).filter((s) => !str.empty(s) || !duplicates.includes(s));
 
-    results = await Order.findAll({
-        attributes: ['serial'],
-        where: {
-            createdAt: { [Op.gt]: moment().subtract(35, 'days').toDate() },
-            [Op.or]: [{ serial: serials }, { newSerial: serials }],
-        },
-        raw: true,
-    });
-
-    const availableSerialsWithinLast30days = results.map((row) => row.serial);
+    const availableSerialsFromLast35days = await filterAvailableSerials(serials, 35);
 
     rows.forEach((row) => {
         let newOrder = {
@@ -71,8 +63,9 @@ const bulkCreate = async (rows, res) => {
             description: str.sanify(row[3]),
         };
 
-        if (availableSerialsWithinLast30days.includes(newOrder.serial)) {
+        if (availableSerialsFromLast35days.includes(newOrder.serial)) {
             newOrder.warning = 'QL30';
+            newOrder.method = 'khác';
         }
 
         // Optional: classisy the orders
