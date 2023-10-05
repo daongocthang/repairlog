@@ -34,6 +34,7 @@ export const upload = async (req, res) => {
 const bulkCreate = async (rows, res) => {
     let pendingOrders = [];
     const constriants = { receiptNo: rows.map((row) => str.sanify(row[0])).filter((s) => !str.empty(s)) };
+
     const ws = new Worksheet('ImportError');
     ws.addColumn({ header: 'Mã phiếu', key: 'receiptNo', width: 32 })
         .addColumn({ header: 'Tên TB', key: 'model', width: 32 })
@@ -42,12 +43,25 @@ const bulkCreate = async (rows, res) => {
         .addColumn({ header: 'Thông báo lỗi', key: 'error', width: 20 });
 
     let results = await Order.findAll({
-        attributes: ['receiptNo'],
+        attributes: ['receiptNo', 'serial'],
         where: constriants,
         raw: true,
     });
 
     const duplicates = results.map((row) => row.receiptNo);
+
+    const serials = rows.map((row) => str.sanify(row[2])).filter((s) => !str.empty(s) || !duplicates.includes(s));
+
+    results = await Order.findAll({
+        attributes: ['serial'],
+        where: {
+            createdAt: { [Op.gt]: moment().subtract(35, 'days').toDate() },
+            [Op.or]: [{ serial: serials }, { newSerial: serials }],
+        },
+        raw: true,
+    });
+
+    const availableSerialsWithinLast30days = results.map((row) => row.serial);
 
     rows.forEach((row) => {
         let newOrder = {
@@ -56,6 +70,10 @@ const bulkCreate = async (rows, res) => {
             serial: str.sanify(row[2]),
             description: str.sanify(row[3]),
         };
+
+        if (availableSerialsWithinLast30days.includes(newOrder.serial)) {
+            newOrder.warning = 'QL30';
+        }
 
         // Optional: classisy the orders
 

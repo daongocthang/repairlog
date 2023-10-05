@@ -136,6 +136,8 @@ const bulkChangeStatus = (req, res) => {
         });
 };
 
+const findDuplicates = (array, interval) => {};
+
 export default {
     findByQuery,
     findBySlug,
