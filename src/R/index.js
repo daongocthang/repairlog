@@ -28,7 +28,7 @@ const status = ['đang sửa', 'chờ trả', 'kết thúc'].map((s) => {
 });
 
 const tags = [
-    TagBuilder.build('hôm nay', { createdAt: { [Op.gte]: new Date().setHours(0, 0, 0, 0) } }, 'primary'),
+    TagBuilder.build('hôm nay', { createdAt: { [Op.gt]: new Date().setHours(0, 0, 0, 0) } }, 'primary'),
     TagBuilder.build('chờ trả', { status: 'chờ trả' }, 'info'),
     TagBuilder.build('đang sửa', { status: 'đang sửa', method: { [Op.is]: null } }, 'warning'),
 ];
