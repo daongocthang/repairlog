@@ -10,7 +10,9 @@
         "clean": "rm -rf build && mkdir build",
         "build:babel": "babel src -d build --copy-files",
         "build": "npm run clean && npm run build:babel",
-        "production": "node build/index.js"
+        "production": "node build/index.js",
+        "service:install": "node service-install",
+        "service:remove": "node service-remove"
     },
     "author": "",
     "license": "ISC",
