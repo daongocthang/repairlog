@@ -123,12 +123,3 @@ function exportXlsxFile(settings = { data, fileName, sheetName, widthCols: [{ wc
     XLSX.utils.book_append_sheet(wb, ws, sheetName);
     XLSX.writeFile(wb, fileName);
 }
-function getQueryParams(url) {
-    const paramArr = url.slice(url.indexOf('?') + 1).split('&');
-    const params = {};
-    paramArr.map((param) => {
-        const [key, val] = param.split('=');
-        params[key] = decodeURIComponent(val);
-    });
-    return params;
-}
