@@ -120,7 +120,7 @@ function updateByPk() {
 }
 
 function rememberSearch() {
-    const params = getQueryParams(window.location.href);
+    const params = new URLSearchParams(window.location.search);
     const firstCloud = $('#clouds li:first-child');
     if (window.location.pathname !== '/search') {
         firstCloud.addClass('hidden');
@@ -130,9 +130,10 @@ function rememberSearch() {
     firstCloud.removeClass('hidden');
 
     const root = $('.search-box');
-    $.each(params, function (k, v) {
+    for (const [k, v] of params) {
         root.find(`[name="${k}"]`).val(v.trim());
-    });
+    }
+
     root.find(`[name="value"]`).prop(`disabled`, root.find(`[name="key"]`).val() === 'all');
     root.find('.dt-picker').each(function () {
         $(this).datepicker('update', $(this).val());
