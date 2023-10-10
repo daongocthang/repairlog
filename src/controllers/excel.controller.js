@@ -103,7 +103,7 @@ const bulkCreate = async (rows, res) => {
 };
 
 const bulkUpdate = async (rows, req, res) => {
-    const { ignoreBlank } = req.body;
+    const ignoreBlank = req.body.ignoreBlank === 'true';
     const constriants = { receiptNo: rows.map((row) => str.sanitize(row[0])).filter((s) => !str.empty(s)) };
     let promises = [];
     let results;

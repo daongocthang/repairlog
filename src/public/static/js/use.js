@@ -20,6 +20,7 @@ $('#navbarContent .launch-modal').on('click', function () {
         afterLoad: function () {
             $('#modal form').attr('action', action);
             $('.download__url').attr('href', attached);
+            if (action.endsWith('create')) $('#modal .form-check').addClass('hidden');
         },
     });
 });
