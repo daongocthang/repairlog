@@ -46,9 +46,11 @@ function uploadExcelFile() {
     if (!form) return;
 
     const input = form.find('input')[0];
+    const ignoreBlank = form.find('.form-check-input').prop('checked');
 
     formData = new FormData();
     formData.append('file', input.files[0]);
+    formData.append('ignoreBlank', ignoreBlank);
 
     modal.submit(
         {
@@ -111,6 +113,7 @@ function updateByPk() {
     const form = $('#modal form');
     if (!form) return;
     const data = parseJsonData(form.serializeArray());
+    console.log(data);
     modal.submit(
         { url: form.attr('action'), type: 'put', data: { order: JSON.stringify(data) } },
         (then = function () {

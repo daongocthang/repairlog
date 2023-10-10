@@ -3,6 +3,7 @@ import db from '../models';
 import R from '../R';
 import { str, isObjectEmpty } from '../R/utils';
 import { Sequelize, Op } from 'sequelize';
+import sanitize from 'sanitize-html';
 
 const Order = db.Order;
 
@@ -13,7 +14,7 @@ const findByQuery = (req, res) => {
     let constraints = {};
     const startDate = moment(start, 'DD-MM-YYYY');
     const endDate = moment(end, 'DD-MM-YYYY').endOf('day');
-    const valueSearch = str.empty(value) ? null : str.sanify(value);
+    const valueSearch = str.empty(value) ? null : str.sanitize(value);
 
     constraints.createdAt = { [Op.between]: [startDate, endDate] };
     if (key !== 'all') {
@@ -73,7 +74,7 @@ const removeAllSelections = (req, res) => {
 };
 
 const create = async (req, res) => {
-    const newOrder = JSON.parse(req.body.order);
+    const newOrder = JSON.parse(str.sanitize(req.body.order));
     if (!str.empty(newOrder.serial)) {
         const serialsFromLast35days = await filterAvailableSerials([newOrder.serial], 35);
         if (serialsFromLast35days.length > 0) {
@@ -98,7 +99,7 @@ const create = async (req, res) => {
 };
 
 const updateByPk = (req, res) => {
-    const order = JSON.parse(req.body.order);
+    const order = JSON.parse(sanitize(req.body.order));
     const { receiptNo } = order;
 
     delete order.receiptNo;

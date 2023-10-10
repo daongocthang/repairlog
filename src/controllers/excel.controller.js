@@ -23,7 +23,7 @@ export const upload = async (req, res) => {
         if (req.params.type === 'create') {
             await bulkCreate(rows, res);
         } else if (req.params.type === 'update') {
-            await bulkUpdate(rows, res);
+            await bulkUpdate(rows, req, res);
         }
     } catch (e) {
         res.status(500).send({ message: 'Could not upload the file: ' + req.file.originalname });
@@ -34,7 +34,7 @@ export const upload = async (req, res) => {
 
 const bulkCreate = async (rows, res) => {
     let pendingOrders = [];
-    const constriants = { receiptNo: rows.map((row) => str.sanify(row[0])).filter((s) => !str.empty(s)) };
+    const constriants = { receiptNo: rows.map((row) => str.sanitize(row[0])).filter((s) => !str.empty(s)) };
 
     const ws = new Worksheet('ImportError');
     ws.addColumn({ header: 'Mã phiếu', key: 'receiptNo', width: 32 })
@@ -51,16 +51,16 @@ const bulkCreate = async (rows, res) => {
 
     const duplicates = results.map((row) => row.receiptNo);
 
-    const serials = rows.map((row) => str.sanify(row[2])).filter((s) => !str.empty(s) || !duplicates.includes(s));
+    const serials = rows.map((row) => str.sanitize(row[2])).filter((s) => !str.empty(s) || !duplicates.includes(s));
 
     const availableSerialsFromLast35days = await filterAvailableSerials(serials, 35);
 
     rows.forEach((row) => {
         let newOrder = {
-            receiptNo: str.sanify(row[0]),
-            model: str.sanify(row[1]),
-            serial: str.sanify(row[2]),
-            description: str.sanify(row[3]),
+            receiptNo: str.sanitize(row[0]),
+            model: str.sanitize(row[1]),
+            serial: str.sanitize(row[2]),
+            description: str.sanitize(row[3]),
         };
 
         if (availableSerialsFromLast35days.includes(newOrder.serial)) {
@@ -102,8 +102,9 @@ const bulkCreate = async (rows, res) => {
         });
 };
 
-const bulkUpdate = async (rows, res) => {
-    const constriants = { receiptNo: rows.map((row) => str.sanify(row[0])).filter((s) => !str.empty(s)) };
+const bulkUpdate = async (rows, req, res) => {
+    const { ignoreBlank } = req.body;
+    const constriants = { receiptNo: rows.map((row) => str.sanitize(row[0])).filter((s) => !str.empty(s)) };
     let promises = [];
     let results;
 
@@ -128,11 +129,21 @@ const bulkUpdate = async (rows, res) => {
 
     rows.forEach((row) => {
         let newOrder = {
-            receiptNo: str.sanify(row[0]),
-            newSerial: str.sanify(row[1]),
-            method: str.sanify(row[2]),
-            remark: str.sanify(row[3]),
+            receiptNo: str.sanitize(row[0]),
+            method: str.sanitize(row[2]),
         };
+
+        // TODO: ignore_blank
+        let s = undefined;
+        if (ignoreBlank) {
+            s = str.sanitize(row[1]);
+            if (!str.empty(s)) newOrder.newSerial = s;
+            s = str.sanitize(row[3]);
+            if (!str.empty(s)) newOrder.remark = s;
+        } else {
+            newOrder.newSerial = str.sanitize(row[1]);
+            newOrder.remark = str.sanitize(row[3]);
+        }
 
         const method = newOrder.method;
         const pk = newOrder.receiptNo;

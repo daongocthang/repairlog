@@ -4,6 +4,14 @@ const initTable = function (tableId) {
     $(tableId).bootstrapTable({
         icons: { clearSearch: 'glyphicon-remove' },
         exportTypes: ['excel'],
+        exportOptions: {
+            fileName: function () {
+                return 'ExportFile__' + moment().format('YYDDMMHHmmss');
+            },
+            mso: {
+                fileFormat: 'xlsx',
+            },
+        },
         columns: [
             {
                 field: 'state',
@@ -43,6 +51,7 @@ const initTable = function (tableId) {
                 field: 'remark',
                 title: 'Chi tiết SC',
                 sortable: true,
+                formatter: remarkFormatter,
             },
             {
                 field: 'warning',
@@ -144,6 +153,12 @@ function statusFormatter(value, row, index) {
 
 function warningFormatter(value, row, index) {
     if (value !== null) return `<span class="text-danger font-weight-bold">${value}</span>`;
+}
+
+function remarkFormatter(value, row, index) {
+    if (value == null) return;
+    const regex = /(BH\d{6}[A-Z0-9]{4})/;
+    return value.replace(regex, `<span class="text-danger">$1</span>`);
 }
 
 function notifySelectionChanged() {

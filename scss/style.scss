@@ -65,9 +65,15 @@ mark {
     }
 }
 
-.modal-body .download__container {
-    position: absolute;
-    transform: translateY(52px);
+.modal-body {
+    .form-check {
+        position: absolute;
+        bottom: 2px;
+    }
+    .download__container {
+        position: absolute;
+        transform: translateY(52px);
+    }
 }
 
 label.error {

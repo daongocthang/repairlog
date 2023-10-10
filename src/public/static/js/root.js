@@ -59,7 +59,7 @@ function parseJsonData(array) {
     let results = {};
     $.each(array, function (i, v) {
         let val = v.value.replace(/\r\n$|\n$|^\s+|\s+$/g, '');
-        if (val.length > 0) results[v.name] = val;
+        results[v.name] = val;
     });
 
     return results;

@@ -1,4 +1,5 @@
 import slugify from 'slugify';
+import sanitizeHtml from 'sanitize-html';
 
 // formatter
 export const formatter = {
@@ -13,16 +14,6 @@ export const formatter = {
 
 export const isObjectEmpty = (value) => Object.values(value).length === 0 && value.constructor === Object;
 
-export const isEmpty = (str) => !str || str.length === 0;
-
-export const sanifyInput = (s) => {
-    if (!isEmpty(s))
-        return s
-            .toString()
-            .replace(/[\u200B-\u200D\uFEFF]/g, '')
-            .replace(/\r\n$|^\s+|\s+$/gm, '');
-};
-
 export const str = {
     format: (s, ...args) => {
         let i = args.length;
@@ -32,13 +23,7 @@ export const str = {
         return s;
     },
     empty: (s) => !s || s.length === 0,
-    sanify: (s) => {
-        if (s)
-            return s
-                .toString()
-                .replace(/[\u200B-\u200D\uFEFF]/g, '')
-                .replace(/\r\n$|^\s+|\s+$/gm, '');
-    },
+    sanitize: (s) => sanitizeHtml(s),
 };
 
 export class TagBuilder {
