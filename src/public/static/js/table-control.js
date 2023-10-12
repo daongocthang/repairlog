@@ -187,4 +187,5 @@ function loadingTemplate() {
 
 $(function () {
     initTable('#table');
+    $('.search input').select();
 });
