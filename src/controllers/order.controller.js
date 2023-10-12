@@ -1,9 +1,9 @@
 import moment from 'moment/moment';
-import db from '../models';
-import R from '../R';
-import { str, isObjectEmpty } from '../R/utils';
-import { Sequelize, Op } from 'sequelize';
 import sanitize from 'sanitize-html';
+import { Op, Sequelize } from 'sequelize';
+import R from '../R';
+import { obj, str } from '../R/utils';
+import db from '../models';
 
 const Order = db.Order;
 
@@ -75,6 +75,8 @@ const removeAllSelections = (req, res) => {
 
 const create = async (req, res) => {
     const newOrder = JSON.parse(str.sanitize(req.body.order));
+    obj.sanitize(newOrder);
+
     if (!str.empty(newOrder.serial)) {
         const serialsFromLast35days = await filterAvailableSerials([newOrder.serial], 35);
         if (serialsFromLast35days.length > 0) {
@@ -103,7 +105,9 @@ const updateByPk = (req, res) => {
     const { receiptNo } = order;
 
     delete order.receiptNo;
-    if (isObjectEmpty(order)) {
+    obj.sanitize(order);
+
+    if (obj.empty(order)) {
         return res.status(500).send({ message: R.message.nothing, type: 'error' });
     }
     Order.update(order, { where: { receiptNo } })

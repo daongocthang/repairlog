@@ -114,7 +114,6 @@ function updateByPk() {
     const form = $('#modal form');
     if (!form) return;
     const data = parseJsonData(form.serializeArray());
-    console.log(data);
     modal.submit(
         { url: form.attr('action'), type: 'put', data: { order: JSON.stringify(data) } },
         (then = function () {

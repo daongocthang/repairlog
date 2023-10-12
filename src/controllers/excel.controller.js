@@ -1,7 +1,7 @@
 import fs from 'fs';
 import readXlsxFile from 'read-excel-file/node';
 import R from '../R';
-import { str } from '../R/utils';
+import { obj, str } from '../R/utils';
 import db from '../models';
 import { filterAvailableSerials } from './order.controller';
 
@@ -62,6 +62,7 @@ const bulkCreate = async (rows, res) => {
             serial: str.sanitize(row[2]),
             description: str.sanitize(row[3]),
         };
+        obj.sanitize(newOrder);
 
         if (availableSerialsFromLast35days.includes(newOrder.serial)) {
             newOrder.warning = 'QL30';
@@ -128,21 +129,22 @@ const bulkUpdate = async (rows, req, res) => {
     const availbilities = results.map((row) => row.receiptNo);
 
     rows.forEach((row) => {
-        let newOrder = {
-            receiptNo: str.sanitize(row[0]),
-            method: str.sanitize(row[2]),
-        };
+        let newOrder = { receiptNo: str.sanitize(row[0]) };
 
         // TODO: ignore_blank
         let s = undefined;
         if (ignoreBlank) {
             s = str.sanitize(row[1]);
             if (!str.empty(s)) newOrder.newSerial = s;
+            s = str.sanitize(row[2]);
+            if (!str.empty(s)) newOrder.method = s;
             s = str.sanitize(row[3]);
             if (!str.empty(s)) newOrder.remark = s;
         } else {
             newOrder.newSerial = str.sanitize(row[1]);
+            newOrder.method = str.sanitize(row[2]);
             newOrder.remark = str.sanitize(row[3]);
+            obj.sanitize(newOrder);
         }
 
         const method = newOrder.method;
@@ -151,7 +153,7 @@ const bulkUpdate = async (rows, req, res) => {
         if (!availbilities.includes(pk)) {
             newOrder.error = str.format(R.message.notfound, 'Mã phiếu');
             ws.addRow(newOrder);
-        } else if (str.empty(method) || !methods.includes(method.toLowerCase())) {
+        } else if (!str.empty(method) && !methods.includes(method.toLowerCase())) {
             newOrder.error = str.format(R.message.invalid, 'Biện pháp SC');
             ws.addRow(newOrder);
         } else {

@@ -13,6 +13,14 @@ export const formatter = {
 };
 
 export const isObjectEmpty = (value) => Object.values(value).length === 0 && value.constructor === Object;
+export const obj = {
+    empty: (o) => Object.values(o).length === 0 && o.constructor === Object,
+    sanitize: (o) => {
+        for (const [k, v] of Object.entries(o)) {
+            if (str.empty(v)) o[k] = null;
+        }
+    },
+};
 
 export const str = {
     format: (s, ...args) => {
