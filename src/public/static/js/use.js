@@ -1,3 +1,4 @@
+// Date Picker
 $('.dt-picker').datepicker({
     format: 'dd-mm-yyyy',
     autoclose: true,
@@ -13,6 +14,7 @@ const ErrMsg = {
     length: 'Mã phiếu không hợp lệ',
 };
 
+// Modal Upload File
 $('#navbarContent .launch-modal').on('click', function () {
     const { action, attached } = $(this).data();
     modal.show({
@@ -25,23 +27,7 @@ $('#navbarContent .launch-modal').on('click', function () {
     });
 });
 
-function removeAllSelections() {
-    if (!selections) return;
-    const form = $('#modal form');
-    if (!form) return;
-
-    modal.submit(
-        {
-            url: '/api/v1/order',
-            type: 'delete',
-            data: { selections: JSON.stringify(selections) },
-        },
-        (then = function () {
-            notifyDataSetChanged();
-        }),
-    );
-}
-
+// Excel Files
 function uploadExcelFile() {
     const form = $('#modal form');
     if (!form) return;
@@ -75,6 +61,25 @@ function uploadExcelFile() {
         },
     );
 }
+
+// Actions on Toolbar
+function removeAllSelections() {
+    if (!selections) return;
+    const form = $('#modal form');
+    if (!form) return;
+
+    modal.submit(
+        {
+            url: '/api/v1/order',
+            type: 'delete',
+            data: { selections: JSON.stringify(selections) },
+        },
+        (then = function () {
+            notifyDataSetChanged();
+        }),
+    );
+}
+
 function createOrder() {
     const form = $('#modal form');
     if (!form) return;
@@ -122,6 +127,7 @@ function updateByPk() {
     );
 }
 
+// Advance Search
 function rememberSearch() {
     const params = new URLSearchParams(window.location.search);
     const firstCloud = $('#clouds li:first-child');

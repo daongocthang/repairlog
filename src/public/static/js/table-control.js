@@ -95,8 +95,34 @@ const initTable = function (tableId) {
 
     // onOptionItemSelected
     $('#menuOthers').on('click', '.dropdown-item', function () {
+        const url = $(this).data('url');
+        const itemName = 'pendingList';
+        let pendingList = JSON.parse(localStorage.getItem(itemName));
+        if (pendingList === null) pendingList = [];
+
+        if (url.endsWith('cho-tra')) {
+            $.each(selections, function (i, v) {
+                if (!pendingList.includes(v)) pendingList.push(v);
+            });
+            localStorage.setItem(itemName, JSON.stringify(pendingList));
+            // invoke refresh clouds
+            return;
+        }
+
+        // removing selections from pendingList if exists
+        if (pendingList.length > 0) {
+            $.each(selections, function (i, v) {
+                if (pendingList.includes(v)) pendingList.remove(v);
+            });
+            if (pendingList.length > 0) {
+                localStorage.setItem(itemName, JSON.stringify(pendingList));
+            } else {
+                localStorage.removeItem(itemName);
+            }
+        }
+
         $.ajax({
-            url: $(this).data('url'),
+            url,
             type: 'PUT',
             caches: false,
             data: { constraints: JSON.stringify(selections) },

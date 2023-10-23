@@ -5,10 +5,10 @@ import url from 'url';
 const router = Router();
 
 export default (app) => {
-    app.get('/', (req, res) => {
+    router.get('/', (req, res) => {
         res.redirect('/clouds/hom-nay');
     });
-    app.get('/clouds/:slug', (req, res) => {
+    router.get('/clouds/:slug', (req, res) => {
         const { slug } = req.params;
         const baseURL = '/api/v1';
         res.render('pages/index', {
@@ -18,7 +18,7 @@ export default (app) => {
         });
     });
 
-    app.get('/search', (req, res) => {
+    router.get('/search', (req, res) => {
         const Url = req._parsedUrl;
         const baseURL = '/api/v1';
         res.render('pages/index', {

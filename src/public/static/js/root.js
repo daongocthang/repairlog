@@ -123,3 +123,9 @@ function exportXlsxFile(settings = { data, fileName, sheetName, widthCols: [{ wc
     XLSX.utils.book_append_sheet(wb, ws, sheetName);
     XLSX.writeFile(wb, fileName);
 }
+
+Array.prototype.remove = function (elem) {
+    var arr = this;
+    var i = arr.indexOf(elem);
+    if (i > -1) arr.splice(i, 1);
+};
