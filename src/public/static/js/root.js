@@ -1,14 +1,3 @@
-// String formatter
-String.prototype.format = String.prototype.f = function () {
-    var s = this,
-        i = arguments.length;
-
-    while (i--) {
-        s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), arguments[i]);
-    }
-    return s;
-};
-
 // Toast message
 function toast({ message = '', type = 'success' }) {
     const root = $('#toast');
@@ -123,9 +112,3 @@ function exportXlsxFile(settings = { data, fileName, sheetName, widthCols: [{ wc
     XLSX.utils.book_append_sheet(wb, ws, sheetName);
     XLSX.writeFile(wb, fileName);
 }
-
-Array.prototype.remove = function (elem) {
-    var arr = this;
-    var i = arr.indexOf(elem);
-    if (i > -1) arr.splice(i, 1);
-};
