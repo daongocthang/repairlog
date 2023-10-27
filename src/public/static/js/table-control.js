@@ -96,30 +96,6 @@ const initTable = function (tableId) {
     // onOptionItemSelected
     $('#menuOthers').on('click', '.dropdown-item', function () {
         const url = $(this).data('url');
-        const itemName = 'pendingList';
-        let pendingList = JSON.parse(localStorage.getItem(itemName)) || [];
-        console.log(pendingList);
-
-        if (url.endsWith('cho-tra')) {
-            $.each(selections, function (i, v) {
-                if (!pendingList.includes(v)) pendingList.push(v);
-            });
-            localStorage.setItem(itemName, JSON.stringify(pendingList));
-            // invoke refresh clouds
-            return;
-        }
-
-        if (pendingList.length > 0) {
-            // removing selections from pendingList if exists
-            $.each(selections, function (i, v) {
-                if (pendingList.includes(v)) pendingList.pull(v);
-            });
-            if (pendingList.length > 0) {
-                localStorage.setItem(itemName, JSON.stringify(pendingList));
-            } else {
-                localStorage.removeItem(itemName);
-            }
-        }
 
         $.ajax({
             url,
