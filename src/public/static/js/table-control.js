@@ -93,6 +93,11 @@ const initTable = function (tableId) {
         }
     });
 
+    // onSearchTextChanged
+    $(tableId).on('search.bs.table', function (event, searchText) {
+        cookie.set('table.searchText', searchText, 1);
+    });
+
     // onOptionItemSelected
     $('#menuOthers').on('click', '.dropdown-item', function () {
         const url = $(this).data('url');
@@ -189,5 +194,9 @@ function loadingTemplate() {
 
 $(function () {
     initTable('#table');
-    $('.search input').select();
+    const searchText = cookie.get('table.searchText');
+    if (searchText) {
+        $('#table').bootstrapTable('resetSearch', searchText);
+        $('.search input').select();
+    }
 });

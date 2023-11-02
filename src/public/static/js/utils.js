@@ -27,69 +27,27 @@ String.prototype.format = String.prototype.f = function () {
     return s;
 };
 
-/**
- * A simplified way to interact with localStorage as an array
- */
-class Pending {
-    #collection;
-    #name;
-
-    /** Initialize the private variables
-     * @constructor
-     * @param {string} name
-     */
-    constructor(name) {
-        this.#name = name;
-        this.#collection = this.fetch();
-    }
-
-    /**
-     * Check whether a value contains
-     * @param {*} value
-     * @returns
-     */
-    contains(value) {
-        return this.#collection.includes(value);
-    }
-
-    /** Add to localStorage if not exists
-     * @param {...any} arguments
-     */
-    add() {
-        const itemList = [...arguments];
-        itemList.forEach((item) => {
-            if (!this.contains(item)) this.#collection.push(item);
-        });
-        this.#migrate();
-    }
-
-    /** Remove from localStorage if exists
-     * @param {...any} arguments
-     */
-    remove() {
-        const itemList = [...arguments];
-        itemList.forEach((item) => {
-            if (this.contains(item)) this.#collection.remove(item);
-        });
-        this.#migrate();
-    }
-
-    /**
-     * Fetch data from localStorage
-     * @returns {Array}
-     */
-    fetch() {
-        return JSON.parse(localStorage.getItem(this.#name)) || [];
-    }
-
-    /**
-     * Migrate data to localStorage
-     */
-    #migrate() {
-        if (this.#collection.length > 0) {
-            localStorage.setItem(this.#name, JSON.stringify(this.#collection));
-        } else {
-            localStorage.removeItem(this.#name);
+const throttle = function (fn, delay) {
+    delay = delay || 0;
+    let last = 0;
+    return () => {
+        const now = new Date().getTime();
+        if (now - last < delay) return;
+        last = now;
+        fn();
+    };
+};
+const debounce = function (fn, delay) {
+    delay = delay || 0;
+    let timerId;
+    return () => {
+        if (timerId) {
+            clearTimeout(timerId);
+            timerId = null;
         }
-    }
-}
+
+        timerId = setTimeout(() => {
+            fn();
+        }, delay);
+    };
+};
