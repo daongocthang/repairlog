@@ -8,7 +8,9 @@ const cookie = {
     set: function (cName, cValue, expDays) {
         const date = new Date();
         date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
-        document.cookie = `${cName}=${cValue};expires=${date.toUTCString()};path=/`;
+        document.cookie = `${encodeURIComponent(cName)}=${encodeURIComponent(
+            cValue,
+        )};expires=${date.toUTCString()};path=/`;
     },
     /**
      * Remove a cookie by name
@@ -32,13 +34,25 @@ const cookie = {
      * @returns
      */
     toDict: function () {
-        const decode = decodeURIComponent(document.cookie);
-        const itemList = decode.split(/[;] */);
-        return itemList.reduce((bucket, curItem) => {
+        const itemList = document.cookie.split(/[;] */);
+        return itemList.reduce((dict, curItem) => {
             const pair = curItem.split('=');
-            if (pair.length === 2) bucket[pair[0]] = pair[1];
-            return bucket;
+            if (pair.length === 2) dict[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+            return dict;
         }, {});
+    },
+
+    /**
+     * Parse a JSON string
+     * @param {string} val
+     * @returns
+     */
+    asJson: function (val) {
+        try {
+            return JSON.parse(val);
+        } catch (e) {
+            return undefined;
+        }
     },
 };
 

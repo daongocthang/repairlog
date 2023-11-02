@@ -1,6 +1,8 @@
 var selections = [];
 
-const initTable = function (tableId) {
+const initTable = function (tableId, settings) {
+    const hiddenColumnList = cookie.asJson(cookie.get('table.hiddenColumns')) || [];
+
     $(tableId).bootstrapTable({
         icons: { clearSearch: 'glyphicon-remove' },
         exportTypes: ['excel'],
@@ -98,6 +100,22 @@ const initTable = function (tableId) {
         cookie.set('table.searchText', searchText, 1);
     });
 
+    $(tableId).on('column-switch.bs.table', function (event, columnName) {
+        if (hiddenColumnList instanceof Array) {
+            if (hiddenColumnList.includes(columnName)) {
+                hiddenColumnList.remove(columnName);
+            } else {
+                hiddenColumnList.push(columnName);
+            }
+
+            if (hiddenColumnList.length === 0) {
+                cookie.remove('table.hiddenColumns');
+            } else {
+                cookie.set('table.hiddenColumns', JSON.stringify(hiddenColumnList), 1);
+            }
+        }
+    });
+
     // onOptionItemSelected
     $('#menuOthers').on('click', '.dropdown-item', function () {
         const url = $(this).data('url');
@@ -116,6 +134,8 @@ const initTable = function (tableId) {
             },
         });
     });
+
+    settings({ tableId, hiddenColumnList });
 };
 
 window.operateEvents = {
@@ -193,10 +213,16 @@ function loadingTemplate() {
 }
 
 $(function () {
-    initTable('#table');
-    const searchText = cookie.get('table.searchText');
-    if (searchText) {
-        $('#table').bootstrapTable('resetSearch', searchText);
-        $('.search input').select();
-    }
+    initTable('#table', function (prop) {
+        const { tableId, hiddenColumnList } = prop;
+        hiddenColumnList.forEach((col) => {
+            $(tableId).bootstrapTable('hideColumn', col);
+        });
+
+        const searchText = cookie.get('table.searchText');
+        if (searchText) {
+            $(tableId).bootstrapTable('resetSearch', searchText);
+            $('.search input').select();
+        }
+    });
 });
