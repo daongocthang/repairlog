@@ -6,11 +6,13 @@ const cookie = {
      * @param {number} expDays - expiry date
      */
     set: function (cName, cValue, expDays) {
-        const date = new Date();
-        date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
-        document.cookie = `${encodeURIComponent(cName)}=${encodeURIComponent(
-            cValue,
-        )};expires=${date.toUTCString()};path=/`;
+        let expires = '';
+        if (expDays) {
+            const date = new Date();
+            date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
+            expires = `;expires=${date.toUTCString()}`;
+        }
+        document.cookie = `${encodeURIComponent(cName)}=${encodeURIComponent(cValue || '') + expires};path=/`;
     },
     /**
      * Remove a cookie by name

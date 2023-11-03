@@ -1,6 +1,6 @@
 var selections = [];
 
-const initTable = function (tableId, settings) {
+const initTable = function (tableId) {
     const hiddenColumnList = cookie.asJson(cookie.get('table.hiddenColumns')) || [];
 
     $(tableId).bootstrapTable({
@@ -111,7 +111,7 @@ const initTable = function (tableId, settings) {
             if (hiddenColumnList.length === 0) {
                 cookie.remove('table.hiddenColumns');
             } else {
-                cookie.set('table.hiddenColumns', JSON.stringify(hiddenColumnList), 1);
+                cookie.set('table.hiddenColumns', JSON.stringify(hiddenColumnList));
             }
         }
     });
@@ -135,7 +135,16 @@ const initTable = function (tableId, settings) {
         });
     });
 
-    settings({ tableId, hiddenColumnList });
+    // Configure from cookies
+    hiddenColumnList.forEach((columnName) => {
+        $(tableId).bootstrapTable('hideColumn', columnName);
+    });
+
+    const searchText = cookie.get('table.searchText');
+    if (searchText) {
+        $(tableId).bootstrapTable('resetSearch', searchText);
+        $('.search input').select();
+    }
 };
 
 window.operateEvents = {
@@ -213,16 +222,7 @@ function loadingTemplate() {
 }
 
 $(function () {
-    initTable('#table', function (prop) {
-        const { tableId, hiddenColumnList } = prop;
-        hiddenColumnList.forEach((col) => {
-            $(tableId).bootstrapTable('hideColumn', col);
-        });
-
-        const searchText = cookie.get('table.searchText');
-        if (searchText) {
-            $(tableId).bootstrapTable('resetSearch', searchText);
-            $('.search input').select();
-        }
-    });
+    initTable('#table');
+    const dt = new Date();
+    console.log(dt.toString());
 });
