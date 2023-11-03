@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import { TagBuilder } from './utils';
 import slugify from 'slugify';
+import moment from 'moment/moment';
 
 const message = {
     create: {
@@ -28,7 +29,11 @@ const status = ['đang sửa', 'chờ trả', 'kết thúc'].map((s) => {
 });
 
 const tags = [
-    TagBuilder.build('hôm nay', { createdAt: { [Op.gt]: new Date().setHours(0, 0, 0, 0) } }, 'primary'),
+    TagBuilder.build(
+        'hôm nay',
+        { createdAt: { [Op.between]: [moment().format('YYYY-MM-DD 00:00'), moment().format('YYYY-MM-DD 23:59')] } },
+        'primary',
+    ),
     TagBuilder.build('chờ trả', { status: 'chờ trả' }, 'info'),
     TagBuilder.build('đang sửa', { status: 'đang sửa', method: { [Op.is]: null } }, 'warning'),
 ];

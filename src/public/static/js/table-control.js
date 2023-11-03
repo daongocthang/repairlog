@@ -223,6 +223,4 @@ function loadingTemplate() {
 
 $(function () {
     initTable('#table');
-    const dt = new Date();
-    console.log(dt.toString());
 });

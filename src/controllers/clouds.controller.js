@@ -2,6 +2,7 @@ import slugify from 'slugify';
 import { Op } from 'sequelize';
 import db from '../models';
 import R from '../R';
+import moment from 'moment';
 
 const clouds = async (req, res) => {
     let tags = structuredClone(R.tags);
@@ -9,7 +10,7 @@ const clouds = async (req, res) => {
     try {
         const countToday = await db.Order.count({
             where: {
-                createdAt: { [Op.gt]: new Date().setHours(0, 0, 0, 0) },
+                createdAt: { [Op.between]: [moment().format('YYYY-MM-DD 00:00'), moment().format('YYYY-MM-DD 23:59')] },
             },
         });
 
