@@ -1,7 +1,7 @@
 var selections = [];
 
 const initTable = function (tableId) {
-    const hiddenColumnList = cookie.asJson(cookie.get('table.hiddenColumns')) || [];
+    const hiddenColumnList = cookie.parseJSON(cookie.get('table.hiddenColumns')) || [];
 
     $(tableId).bootstrapTable({
         icons: { clearSearch: 'glyphicon-remove' },
